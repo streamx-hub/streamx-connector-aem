@@ -42,10 +42,10 @@ The following OSGi configurations, included in the Cloud Package with AEM Connec
 
 | Factory PID/PID                                                                         | Property name in OSGi configuration  | Name of corresponding environment variable | Default value set by the Cloud Package with AEM Connector                                                                  |
 |-----------------------------------------------------------------------------------------|--------------------------------------|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| `dev.streamx.aem.connector.blueprints.AssetPublicationHandler`                          | `assets.path.regexp`                 | `STREAMX_ASSETS_PATH_REGEXP`               | `^/content/dam/.+`                                                                                                         |
-| `dev.streamx.aem.connector.blueprints.PageDataService`                                  | `pages.path.regexp`                  | `STREAMX_PAGES_PATH_REGEXP`                | `^/content/.+`                                                                                                             |
-| `dev.streamx.aem.connector.blueprints.PageDataService`                                  | `templates.path.regexp`              | `STREAMX_TEMPLATES_PATH_REGEXP`            | `^/content/experience-fragments/templates/.+`                                                                              |
-| `dev.streamx.aem.connector.blueprints.PageDataService`                                  | `shorten.content.paths`              | `STREAMX_SHORTEN_CONTENT_PATHS`            | `false`                                                                                                                    |
+| `com.streamx.aem.connector.blueprints.AssetPublicationHandler`                          | `assets.path.regexp`                 | `STREAMX_ASSETS_PATH_REGEXP`               | `^/content/dam/.+`                                                                                                         |
+| `com.streamx.aem.connector.blueprints.PageDataService`                                  | `pages.path.regexp`                  | `STREAMX_PAGES_PATH_REGEXP`                | `^/content/.+`                                                                                                             |
+| `com.streamx.aem.connector.blueprints.PageDataService`                                  | `templates.path.regexp`              | `STREAMX_TEMPLATES_PATH_REGEXP`            | `^/content/experience-fragments/templates/.+`                                                                              |
+| `com.streamx.aem.connector.blueprints.PageDataService`                                  | `shorten.content.paths`              | `STREAMX_SHORTEN_CONTENT_PATHS`            | `false`                                                                                                                    |
 | `dev.streamx.sling.connector.impl.DefaultHttpClientFactory`                             | `insecure`                           | `STREAMX_CLIENT_INSECURE`                  | `false`                                                                                                                    |
 | `dev.streamx.sling.connector.selectors.content.ResourceContentRelatedResourcesSelector` | `references.search-regexes`          | `STREAMX_REFERENCES_SEARCH_REGEXES`        | `(/content[^\"'\\s]*\\.coreimg\\.[^\"'\\s]*),(/[^\"'\\s]*etc\\.clientlibs[^\"'\\)\\s]*),url\\([\"']?([^\\)\"']+)[\"']?\\)` |
 | `org.apache.sling.commons.log.LogManager.factory.config`                                | `org.apache.sling.commons.log.level` | `STREAMX_LOG_LEVEL`                        | `WARN`                                                                                                                     |
@@ -58,7 +58,7 @@ The Maven coordinates for the installation artifact are:
 
 ```xml
 <dependency>
-    <groupId>dev.streamx</groupId>
+    <groupId>com.streamx</groupId>
     <artifactId>streamx-connector-aem-cloud-pack-all</artifactId>
     <version>0.0.17</version>
     <type>zip</type>
@@ -80,9 +80,9 @@ One method for installing the Cloud Package with AEM Connector is embedding it i
         -D archetypeVersion=51 \
         -D appTitle="First Hops" \
         -D appId="firsthops" \
-        -D groupId="dev.streamx" \
+        -D groupId="com.streamx" \
         -D artifactId="firsthops" \
-        -D package="dev.streamx.firsthops" \
+        -D package="com.streamx.firsthops" \
         -D singleCountry=n \
         -D includeExamples=y \
         -D version="1.0-SNAPSHOT" \
@@ -95,7 +95,7 @@ One method for installing the Cloud Package with AEM Connector is embedding it i
     <dependencies>
         ...
         <dependency>
-            <groupId>dev.streamx</groupId>
+            <groupId>com.streamx</groupId>
             <artifactId>streamx-connector-aem-cloud-pack-all</artifactId>
             <version>0.0.17</version>
             <type>zip</type>
@@ -125,7 +125,7 @@ One method for installing the Cloud Package with AEM Connector is embedding it i
                     <embeddeds>
                         ...
                         <embedded>
-                            <groupId>dev.streamx</groupId>
+                            <groupId>com.streamx</groupId>
                             <artifactId>streamx-connector-aem-cloud-pack-all</artifactId>
                             <type>zip</type>
                             <target>/apps/firsthops-vendor-packages/content/install</target>
