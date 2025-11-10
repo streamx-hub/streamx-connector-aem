@@ -1,32 +1,33 @@
 package com.streamx.blueprints.data;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.streamx.aem.connector.blueprints.ByteBuffers;
 import java.nio.ByteBuffer;
 
 /**
  * Represents object containing content.
  */
-public class Resource {
+abstract class Resource {
 
-  private ByteBuffer content;
+  private final ByteBuffer content;
+  private final String type;
 
-  public Resource() {
-  }
-
-  public Resource(ByteBuffer content) {
+  @JsonCreator
+  public Resource(@JsonProperty("content") ByteBuffer content, @JsonProperty("type") String type) {
     this.content = content;
+    this.type = type;
   }
 
-  public Resource(byte[] content) {
-    this(ByteBuffer.wrap(content));
-  }
-
-  public Resource(String content) {
-    this(content.getBytes(UTF_8));
+  public Resource(String content, String type) {
+    this(ByteBuffers.fromString(content), type);
   }
 
   public ByteBuffer getContent() {
     return content;
+  }
+
+  public String getType() {
+    return type;
   }
 }

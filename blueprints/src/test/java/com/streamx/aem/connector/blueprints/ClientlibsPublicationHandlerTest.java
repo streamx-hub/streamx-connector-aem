@@ -6,9 +6,9 @@ import com.streamx.aem.connector.test.util.OsgiConfigUtils;
 import com.streamx.aem.connector.test.util.RandomBytesSlingRequestProcessor;
 import com.streamx.aem.connector.test.util.ResourceInfoFactory;
 import com.streamx.blueprints.data.WebResource;
-import dev.streamx.sling.connector.PublishData;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.StreamxPublicationException;
+import com.streamx.sling.connector.PublishData;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.StreamxPublicationException;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.util.Map;
@@ -66,11 +66,10 @@ class ClientlibsPublicationHandlerTest {
       assertThat(handler.canHandle(resourceInfo)).isTrue();
 
       PublishData<WebResource> publishData = handler.getPublishData(resourceInfo);
-      assertThat(publishData.getModel().getContent().array()).hasSize(expectedSize);
-      assertThat(publishData.getKey()).isEqualTo(webResourcePath);
-      assertThat(publishData.getChannel()).isEqualTo("web-resources");
-      assertThat(publishData.getModel()).isInstanceOf(WebResource.class);
-      assertThat(publishData.getProperties()).doesNotContainKey(BasePublicationHandler.SX_TYPE);
+      assertThat(publishData.getData().getContent().array()).hasSize(expectedSize);
+      assertThat(publishData.getSubject()).isEqualTo(webResourcePath);
+      assertThat(publishData.getData()).isInstanceOf(WebResource.class);
+      assertThat(publishData.getData().getType()).isNull();
 
       OsgiConfigUtils.disableHandler(handler, context);
       assertThat(handler.canHandle(resourceInfo)).isFalse();

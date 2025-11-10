@@ -1,9 +1,9 @@
 package com.streamx.aem.connector.blueprints;
 
 import com.streamx.blueprints.data.Fragment;
-import dev.streamx.sling.connector.PublicationHandler;
-import dev.streamx.sling.connector.ResourceInfo;
-import java.util.Map;
+import com.streamx.sling.connector.PublicationHandler;
+import com.streamx.sling.connector.ResourceInfo;
+import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -51,27 +51,35 @@ public class FragmentPublicationHandler extends BasePublicationHandler<Fragment>
   }
 
   @Override
-  protected String getPublicationChannel() {
-    return config.get().publication_channel();
+  protected String getPublishEventType() {
+    return config.get().publish_event_type();
   }
 
   @Override
-  protected String getPublicationKey(String resourcePath) {
+  protected String getUnpublishEventType() {
+    return config.get().unpublish_event_type();
+  }
+
+  @Override
+  protected String getPublicationSubject(String resourcePath) {
     return String.format("%s.html", resourcePath);
   }
 
   @Override
-  protected Fragment generateModel(Resource resource, ResourceResolver resourceResolver) {
+  protected Fragment getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     String content = pageDataService.readContentAsHtml(resource, resourceResolver);
-    return new Fragment(content);
+    return new Fragment(content, getResourceType(resourceInfo));
   }
 
   @Override
-  protected Map<String, String> getMessageProperties(ResourceInfo resourceInfo) {
-    return getSxTypeAsMap(
-        resourceInfo,
-        config.get().rel_path_to_node_with_jcr_prop_for_sx_type(),
-        config.get().jcr_prop_name_for_sx_type()
+  protected Fragment getUnpublishPayload(ResourceInfo resourceInfo) {
+    return new Fragment((ByteBuffer) null, getResourceType(resourceInfo));
+  }
+
+  private String getResourceType(ResourceInfo resourceInfo) {
+    return readProperty(resourceInfo,
+        config.get().rel_path_to_node_with_jcr_prop_for_streamx_resource_type(),
+        config.get().jcr_prop_name_for_streamx_resource_type()
     );
   }
 

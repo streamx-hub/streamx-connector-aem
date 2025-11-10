@@ -1,9 +1,9 @@
 package com.streamx.aem.connector.blueprints;
 
 import com.streamx.blueprints.data.Asset;
-import dev.streamx.sling.connector.PublicationHandler;
-import dev.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandler;
-import dev.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandlerConfig;
+import com.streamx.sling.connector.PublicationHandler;
+import com.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandler;
+import com.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandlerConfig;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.sling.api.resource.ResourceResolverFactory;
@@ -51,8 +51,13 @@ public class AssetResourcePathPublicationHandler extends ResourcePathPublication
       }
 
       @Override
-      public String channel() {
-        return config.get().publication_channel();
+      public String publishEventType() {
+        return config.get().publish_event_type();
+      }
+
+      @Override
+      public String unpublishEventType() {
+        return config.get().unpublish_event_type();
       }
 
       @Override
@@ -63,13 +68,8 @@ public class AssetResourcePathPublicationHandler extends ResourcePathPublication
   }
 
   @Override
-  public Class<Asset> modelClass() {
-    return Asset.class;
-  }
-
-  @Override
-  public Asset model(InputStream inputStream) {
-    return new Asset(InputStreamConverter.toByteBuffer(inputStream));
+  public Asset data(InputStream inputStream) {
+    return new Asset(InputStreamConverter.toByteBuffer(inputStream), null);
   }
 
   @Override

@@ -10,9 +10,9 @@ import com.streamx.aem.connector.test.util.FixedResponseSlingRegexRequestProcess
 import com.streamx.aem.connector.test.util.OsgiConfigUtils;
 import com.streamx.aem.connector.test.util.ResourceInfoFactory;
 import com.streamx.blueprints.data.Data;
-import dev.streamx.sling.connector.PublishData;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.UnpublishData;
+import com.streamx.sling.connector.PublishData;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.UnpublishData;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ class PageModelPublicationHandlerTest {
         "page.resource.path.regex", "^/content/pages/.*"
     );
 
-    assertPageIsIngestedWithKeySuffix(handler, ".model.json");
+    assertPageIsIngestedWithSubjectSuffix(handler, ".model.json");
   }
 
   @Test
@@ -66,7 +66,7 @@ class PageModelPublicationHandlerTest {
         "extension.to.append", "txt"
     );
 
-    assertPageIsIngestedWithKeySuffix(handler, ".abc.def.ghi.txt");
+    assertPageIsIngestedWithSubjectSuffix(handler, ".abc.def.ghi.txt");
   }
 
   @Test
@@ -78,10 +78,10 @@ class PageModelPublicationHandlerTest {
         "extension.to.append", null
     );
 
-    assertPageIsIngestedWithKeySuffix(handler, StringUtils.EMPTY);
+    assertPageIsIngestedWithSubjectSuffix(handler, StringUtils.EMPTY);
   }
 
-  private void assertPageIsIngestedWithKeySuffix(PageModelPublicationHandler handler, String expectedKeySuffix) throws Exception {
+  private void assertPageIsIngestedWithSubjectSuffix(PageModelPublicationHandler handler, String expectedSubjectSuffix) throws Exception {
     ResourceInfo pageResource = ResourceInfoFactory.createWithProperties(
         context, PAGE_RESOURCE_PATH, "jcr:primaryType", "jcr:content/cq:template"
     );
@@ -89,18 +89,18 @@ class PageModelPublicationHandlerTest {
 
     PublishData<Data> publishData = handler.getPublishData(pageResource);
     assertThat(publishData).isNotNull();
-    assertThat(publishData.getKey()).isEqualTo(PAGE_RESOURCE_PATH + expectedKeySuffix);
-    assertThat(publishData.getModel().getContent().array()).asString().isEqualTo(PAGE_MODEL_JSON);
-    assertThat(publishData.getProperties()).containsEntry(BasePublicationHandler.SX_TYPE, "/conf/firsthops/settings/wcm/templates/page-content");
+    assertThat(publishData.getSubject()).isEqualTo(PAGE_RESOURCE_PATH + expectedSubjectSuffix);
+    assertThat(publishData.getData().getContent().array()).asString().isEqualTo(PAGE_MODEL_JSON);
+    assertThat(publishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
 
     UnpublishData<Data> unpublishData = handler.getUnpublishData(pageResource);
-    assertThat(unpublishData.getKey()).isEqualTo(PAGE_RESOURCE_PATH + expectedKeySuffix);
-    assertThat(unpublishData.getProperties()).containsEntry(BasePublicationHandler.SX_TYPE, "/conf/firsthops/settings/wcm/templates/page-content");
+    assertThat(unpublishData.getSubject()).isEqualTo(PAGE_RESOURCE_PATH + expectedSubjectSuffix);
+    assertThat(unpublishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
 
     // verify internal request was sent with the same url suffix, and that it was called only once (not for getUnpublishData)
     verify(requestProcessor).processRequest(
         argThat(request ->
-            request.getRequestURI().equals(PAGE_RESOURCE_PATH + expectedKeySuffix)
+            request.getRequestURI().equals(PAGE_RESOURCE_PATH + expectedSubjectSuffix)
             && request.getParameter("resolveStreamxDirectives").equals("true")),
         any(),
         any()

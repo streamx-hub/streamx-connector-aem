@@ -1,6 +1,7 @@
 package com.streamx.aem.connector.blueprints;
 
 import com.day.cq.wcm.api.NameConstants;
+import com.streamx.blueprints.data.Data;
 import org.apache.jackrabbit.JcrConstants;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
@@ -10,12 +11,20 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 public @interface PageModelPublicationHandlerConfig {
 
   @AttributeDefinition(
-      name = "Publications Channel Name",
-      description = "Name of the channel in StreamX to publish page models to.",
+      name = "Publish Event Type",
+      description = "Publish event type of data to be ingested by StreamX.",
       type = AttributeType.STRING,
-      defaultValue = "data"
+      defaultValue = Data.TYPE_PUBLISHED
   )
-  String publication_channel() default "data";
+  String publish_event_type() default Data.TYPE_PUBLISHED;
+
+  @AttributeDefinition(
+      name = "Unpublish Event Type",
+      description = "Unpublish event type of data to be ingested by StreamX.",
+      type = AttributeType.STRING,
+      defaultValue = Data.TYPE_UNPUBLISHED
+  )
+  String unpublish_event_type() default Data.TYPE_UNPUBLISHED;
 
   @AttributeDefinition(
       name = "Is Enabled?",
@@ -50,21 +59,21 @@ public @interface PageModelPublicationHandlerConfig {
   String extension_to_append() default "json";
 
   @AttributeDefinition(
-      name = "Relative Path to Node with JCR Property for `sx:type`",
+      name = "Relative Path to Node with JCR Property for StreamX resource type",
       description = "Relative path to the child node of the resource that is being published, that "
-          + "is expected to have a JCR property for `sx:type`.",
+          + "is expected to have a JCR property for StreamX resource type.",
       type = AttributeType.STRING,
       defaultValue = JcrConstants.JCR_PRIMARYTYPE
   )
-  String rel_path_to_node_with_jcr_prop_for_sx_type() default JcrConstants.JCR_CONTENT;
+  String rel_path_to_node_with_jcr_prop_for_streamx_resource_type() default JcrConstants.JCR_CONTENT;
 
   @AttributeDefinition(
-      name = "Name of JCR property for `sx:type`",
+      name = "Name of JCR property for StreamX resource type",
       description = "If the resource that is being published has a respective child with a JCR "
-          + "property with the specified name, the value of that property will be set as a "
-          + "value of the `sx:type` property of the message ingested into StreamX.",
+          + "property with the specified name, the value of that property will be set as "
+          + "the type of the Data resource ingested into StreamX.",
       type = AttributeType.STRING,
       defaultValue = NameConstants.PN_TEMPLATE
   )
-  String jcr_prop_name_for_sx_type() default NameConstants.PN_TEMPLATE;
+  String jcr_prop_name_for_streamx_resource_type() default NameConstants.PN_TEMPLATE;
 }

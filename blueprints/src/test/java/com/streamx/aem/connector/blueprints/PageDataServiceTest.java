@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.streamx.aem.connector.test.util.FixedResponseSlingRequestProcessor;
 import com.streamx.aem.connector.test.util.ResourceInfoFactory;
-import dev.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.ResourceInfo;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.lang.annotation.Annotation;

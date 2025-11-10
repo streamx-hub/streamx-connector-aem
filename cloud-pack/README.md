@@ -8,7 +8,7 @@ The Cloud Package with AEM Connector is compatible with both AEM as a Cloud Serv
 
 For AEM 6.5 versions lower than 6.5.22, installation of AEM Connector can be achieved in two ways:
 1. Ensure the `org.apache.felix:org.apache.felix.configadmin:1.9.12+` bundle is installed in AEM and then install there the Cloud Package with AEM Connector.
-1. Create and install in AEM all necessary dependencies and OSGi configurations required for the AEM Connector to function within AEM, in a way similar how this is made in this Cloud Package with AEM Connector.
+2. Create and install in AEM all necessary dependencies and OSGi configurations required for the AEM Connector to function within AEM, in a way similar how this is made in this Cloud Package with AEM Connector.
 
 ## Purpose of the Cloud Package with AEM Connector
 
@@ -25,7 +25,7 @@ The Cloud Package with AEM Connector includes default OSGi configurations for th
 
 ### Mandatory Configuration Change
 
-The Cloud Package with AEM Connector includes an OSGi configuration `dev.streamx.sling.connector.impl.StreamxClientConfigImpl~streamx-instance`. This configuration:
+The Cloud Package with AEM Connector includes an OSGi configuration `com.streamx.sling.connector.impl.StreamxClientConfigImpl~streamx-instance`. This configuration:
 1. Defines the URL for the StreamX ingestion HTTP endpoint. The deployer _must_ specify this URL by setting the `STREAMX_CLIENT_URL` environment variable for the target AEM environment.
 2. Defines the JWT authentication token for the StreamX ingestion HTTP endpoint. If the endpoint requires the authentication, the deployer _must_ specify the token by setting the `STREAMX_CLIENT_AUTH_TOKEN` secret for the target AEM environment.
 
@@ -46,8 +46,8 @@ The following OSGi configurations, included in the Cloud Package with AEM Connec
 | `com.streamx.aem.connector.blueprints.PageDataService`                                  | `pages.path.regexp`                  | `STREAMX_PAGES_PATH_REGEXP`                | `^/content/.+`                                                                                                             |
 | `com.streamx.aem.connector.blueprints.PageDataService`                                  | `templates.path.regexp`              | `STREAMX_TEMPLATES_PATH_REGEXP`            | `^/content/experience-fragments/templates/.+`                                                                              |
 | `com.streamx.aem.connector.blueprints.PageDataService`                                  | `shorten.content.paths`              | `STREAMX_SHORTEN_CONTENT_PATHS`            | `false`                                                                                                                    |
-| `dev.streamx.sling.connector.impl.DefaultHttpClientFactory`                             | `insecure`                           | `STREAMX_CLIENT_INSECURE`                  | `false`                                                                                                                    |
-| `dev.streamx.sling.connector.selectors.content.ResourceContentRelatedResourcesSelector` | `references.search-regexes`          | `STREAMX_REFERENCES_SEARCH_REGEXES`        | `(/content[^\"'\\s]*\\.coreimg\\.[^\"'\\s]*),(/[^\"'\\s]*etc\\.clientlibs[^\"'\\)\\s]*),url\\([\"']?([^\\)\"']+)[\"']?\\)` |
+| `com.streamx.sling.connector.impl.DefaultHttpClientFactory`                             | `insecure`                           | `STREAMX_CLIENT_INSECURE`                  | `false`                                                                                                                    |
+| `com.streamx.sling.connector.selectors.content.ResourceContentRelatedResourcesSelector` | `references.search-regexes`          | `STREAMX_REFERENCES_SEARCH_REGEXES`        | `(/content[^\"'\\s]*\\.coreimg\\.[^\"'\\s]*),(/[^\"'\\s]*etc\\.clientlibs[^\"'\\)\\s]*),url\\([\"']?([^\\)\"']+)[\"']?\\)` |
 | `org.apache.sling.commons.log.LogManager.factory.config`                                | `org.apache.sling.commons.log.level` | `STREAMX_LOG_LEVEL`                        | `WARN`                                                                                                                     |
 
 ## Installation
@@ -89,7 +89,7 @@ One method for installing the Cloud Package with AEM Connector is embedding it i
         -D aemVersion="cloud"
     ```
 
-2. Add the Cloud Package with AEM Connector as a dependency in the `dependencies` section of `all/pom.xml` and exclude the `dev.streamx:ingestion-client` artifact:
+2. Add the Cloud Package with AEM Connector as a dependency in the `dependencies` section of `all/pom.xml` and exclude the `com.streamx:ingestion-client` artifact:
 
     ```xml
     <dependencies>
@@ -101,7 +101,7 @@ One method for installing the Cloud Package with AEM Connector is embedding it i
             <type>zip</type>
             <exclusions>
                 <exclusion>
-                    <groupId>dev.streamx</groupId>
+                    <groupId>com.streamx</groupId>
                     <artifactId>ingestion-client</artifactId>
                 </exclusion>
             </exclusions>

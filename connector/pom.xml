@@ -40,7 +40,7 @@
     </dependency>
     <!-- StreamX -->
     <dependency>
-      <groupId>dev.streamx</groupId>
+      <groupId>com.streamx</groupId>
       <artifactId>streamx-connector-sling</artifactId>
     </dependency>
     <!-- OSGi Metadata (not used in runtime)-->
@@ -64,6 +64,12 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>3.27.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.2.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>

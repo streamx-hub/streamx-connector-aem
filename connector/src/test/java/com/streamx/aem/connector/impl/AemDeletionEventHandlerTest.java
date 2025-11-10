@@ -5,7 +5,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import dev.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.ResourceInfo;
 import java.util.List;
 import java.util.Map;
 import org.apache.sling.testing.mock.osgi.MockOsgi;

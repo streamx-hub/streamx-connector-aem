@@ -1,9 +1,9 @@
 package com.streamx.aem.connector.blueprints;
 
 import com.streamx.blueprints.data.Data;
-import dev.streamx.sling.connector.PublicationHandler;
-import dev.streamx.sling.connector.ResourceInfo;
-import java.util.Map;
+import com.streamx.sling.connector.PublicationHandler;
+import com.streamx.sling.connector.ResourceInfo;
+import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
@@ -25,12 +25,13 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
   private final PageDataService pageDataService;
 
   private final AtomicReference<Boolean> enabled = new AtomicReference<>();
-  private final AtomicReference<String> publicationChannel = new AtomicReference<>();
+  private final AtomicReference<String> publishEventType = new AtomicReference<>();
+  private final AtomicReference<String> unpublishEventType = new AtomicReference<>();
   private final AtomicReference<Pattern> pageResourcePathRegex = new AtomicReference<>();
   private final AtomicReference<String[]> selectorsToAppend = new AtomicReference<>();
   private final AtomicReference<String> extensionToAppend = new AtomicReference<>();
-  private final AtomicReference<String> relPathToNodeWithJcrPropForSxType = new AtomicReference<>();
-  private final AtomicReference<String> jcrPropNameForSxType = new AtomicReference<>();
+  private final AtomicReference<String> relPathToNodeWithJcrPropForResourceType = new AtomicReference<>();
+  private final AtomicReference<String> jcrPropNameForResourceType = new AtomicReference<>();
 
   @Activate
   public PageModelPublicationHandler(
@@ -46,15 +47,16 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
   @Modified
   void configure(PageModelPublicationHandlerConfig config) {
     enabled.set(config.enabled());
-    publicationChannel.set(config.publication_channel());
+    publishEventType.set(config.publish_event_type());
+    unpublishEventType.set(config.unpublish_event_type());
 
     String pathRegex = config.page_resource_path_regex();
     pageResourcePathRegex.set(Optional.ofNullable(pathRegex).map(Pattern::compile).orElse(null));
 
     selectorsToAppend.set(Optional.ofNullable(config.selectors_to_append()).orElse(new String[0]));
     extensionToAppend.set(config.extension_to_append());
-    relPathToNodeWithJcrPropForSxType.set(config.rel_path_to_node_with_jcr_prop_for_sx_type());
-    jcrPropNameForSxType.set(config.jcr_prop_name_for_sx_type());
+    relPathToNodeWithJcrPropForResourceType.set(config.rel_path_to_node_with_jcr_prop_for_streamx_resource_type());
+    jcrPropNameForResourceType.set(config.jcr_prop_name_for_streamx_resource_type());
   }
 
   @Override
@@ -82,32 +84,40 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
   }
 
   @Override
-  protected String getPublicationChannel() {
-    return publicationChannel.get();
+  protected String getPublishEventType() {
+    return publishEventType.get();
   }
 
   @Override
-  protected Data generateModel(Resource resource, ResourceResolver resourceResolver) {
+  protected String getUnpublishEventType() {
+    return unpublishEventType.get();
+  }
+
+  @Override
+  protected Data getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     String content = pageDataService.readContent(
         resource,
         selectorsToAppend.get(),
         extensionToAppend.get(),
         resourceResolver
     );
-    return new Data(content);
+    return new Data(content, getResourceType(resourceInfo));
   }
 
   @Override
-  protected Map<String, String> getMessageProperties(ResourceInfo resourceInfo) {
-    return getSxTypeAsMap(
-        resourceInfo,
-        relPathToNodeWithJcrPropForSxType.get(),
-        jcrPropNameForSxType.get()
+  protected Data getUnpublishPayload(ResourceInfo resourceInfo) {
+    return new Data((ByteBuffer) null, getResourceType(resourceInfo));
+  }
+
+  private String getResourceType(ResourceInfo resourceInfo) {
+    return readProperty(resourceInfo,
+        relPathToNodeWithJcrPropForResourceType.get(),
+        jcrPropNameForResourceType.get()
     );
   }
 
   @Override
-  protected String getPublicationKey(String resourcePath) {
+  protected String getPublicationSubject(String resourcePath) {
     return SlingUriCreator.create(
         resourcePath,
         selectorsToAppend.get(),

@@ -1,7 +1,7 @@
 package com.streamx.aem.connector.blueprints;
 
 import com.drew.lang.annotations.Nullable;
-import dev.streamx.sling.connector.util.SimpleInternalRequest;
+import com.streamx.sling.connector.util.SimpleInternalRequest;
 import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;

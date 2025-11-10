@@ -3,7 +3,7 @@ package com.streamx.aem.connector.blueprints;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.drew.lang.annotations.Nullable;
-import dev.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.ResourceInfo;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,11 +85,11 @@ public class PageDataService {
 
   public String readContent(Resource resource,
       String[] selectors, @Nullable String extension, ResourceResolver resourceResolver) {
-    String pageModel = InternalRequestForPage.getContent(
+    String pageContent = InternalRequestForPage.getContent(
         resource, selectors, extension, resourceResolver, slingRequestProcessor, additionalInternalRequestProperties
     );
 
-    return adjustedPageContent(resource.getPath(), pageModel);
+    return adjustedPageContent(resource.getPath(), pageContent);
   }
 
   private String adjustedPageContent(String resourcePath, String pageContent) {

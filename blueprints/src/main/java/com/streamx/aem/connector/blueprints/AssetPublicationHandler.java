@@ -2,11 +2,10 @@ package com.streamx.aem.connector.blueprints;
 
 import com.day.cq.dam.api.Rendition;
 import com.streamx.blueprints.data.Asset;
-import dev.streamx.sling.connector.PublicationHandler;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.util.SimpleInternalRequest;
+import com.streamx.sling.connector.PublicationHandler;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.util.SimpleInternalRequest;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.sling.api.resource.Resource;
@@ -67,23 +66,28 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
   }
 
   @Override
-  protected String getPublicationChannel() {
-    return config.get().publication_channel();
+  protected String getPublishEventType() {
+    return config.get().publish_event_type();
   }
 
   @Override
-  protected Asset generateModel(Resource resource, ResourceResolver resourceResolver) {
+  protected String getUnpublishEventType() {
+    return config.get().unpublish_event_type();
+  }
+
+  @Override
+  protected Asset getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     if (isContentFragment(resource)) {
       LOG.info("Resource is a Content Fragment, skipping publication: {}", resource.getPath());
       return null;
     }
 
-    return generateAssetModel(resource, resourceResolver);
+    return createAssetInstance(resourceInfo, resource, resourceResolver);
   }
 
   @Override
-  protected Map<String, String> getMessageProperties(ResourceInfo resourceInfo) {
-    return getSxTypeAsMap(resourceInfo, config.get().jcr_prop_name_for_sx_type());
+  protected Asset getUnpublishPayload(ResourceInfo resourceInfo) {
+    return new Asset(null, getResourceType(resourceInfo));
   }
 
   private static boolean isContentFragment(Resource existingAssetResource) {
@@ -93,7 +97,7 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
         .orElse(false);
   }
 
-  private Asset generateAssetModel(Resource resource, ResourceResolver resourceResolver) {
+  private Asset createAssetInstance(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     LOG.trace("Generating {} out of {}", Asset.class, resource.getPath());
     SlingUri slingUri = SlingUriBuilder.parse(resource.getPath(), resourceResolver).build();
 
@@ -104,7 +108,11 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
         .or(() -> new SimpleInternalRequest(slingUri, slingRequestProcessor, resourceResolver).getResponseAsInputStream())
         .orElseThrow();
 
-    return new Asset(InputStreamConverter.toByteBuffer(assetContentStream));
+    return new Asset(InputStreamConverter.toByteBuffer(assetContentStream), getResourceType(resourceInfo));
+  }
+
+  private String getResourceType(ResourceInfo resourceInfo) {
+    return readProperty(resourceInfo, config.get().jcr_prop_name_for_streamx_resource_type());
   }
 
 }

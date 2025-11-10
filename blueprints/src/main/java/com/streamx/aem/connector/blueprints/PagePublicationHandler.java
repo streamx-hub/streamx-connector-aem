@@ -1,9 +1,9 @@
 package com.streamx.aem.connector.blueprints;
 
 import com.streamx.blueprints.data.Page;
-import dev.streamx.sling.connector.PublicationHandler;
-import dev.streamx.sling.connector.ResourceInfo;
-import java.util.Map;
+import com.streamx.sling.connector.PublicationHandler;
+import com.streamx.sling.connector.ResourceInfo;
+import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -59,27 +59,35 @@ public class PagePublicationHandler extends BasePublicationHandler<Page> {
   }
 
   @Override
-  protected String getPublicationChannel() {
-    return config.get().publication_channel();
+  protected String getPublishEventType() {
+    return config.get().publish_event_type();
   }
 
   @Override
-  protected Page generateModel(Resource resource, ResourceResolver resourceResolver) {
+  protected String getUnpublishEventType() {
+    return config.get().unpublish_event_type();
+  }
+
+  @Override
+  protected Page getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     String content = pageDataService.readContentAsHtml(resource, resourceResolver);
-    return new Page(content);
+    return new Page(content, getResourceType(resourceInfo));
   }
 
   @Override
-  protected Map<String, String> getMessageProperties(ResourceInfo resourceInfo) {
-    return getSxTypeAsMap(
-        resourceInfo,
-        config.get().rel_path_to_node_with_jcr_prop_for_sx_type(),
-        config.get().jcr_prop_name_for_sx_type()
+  protected Page getUnpublishPayload(ResourceInfo resourceInfo) {
+    return new Page((ByteBuffer) null, getResourceType(resourceInfo));
+  }
+
+  private String getResourceType(ResourceInfo resourceInfo) {
+    return readProperty(resourceInfo,
+        config.get().rel_path_to_node_with_jcr_prop_for_streamx_resource_type(),
+        config.get().jcr_prop_name_for_streamx_resource_type()
     );
   }
 
   @Override
-  protected String getPublicationKey(String resourcePath) {
+  protected String getPublicationSubject(String resourcePath) {
     return resourcePath + ".html";
   }
 

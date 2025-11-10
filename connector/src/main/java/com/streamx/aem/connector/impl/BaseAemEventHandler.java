@@ -1,7 +1,7 @@
 package com.streamx.aem.connector.impl;
 
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.StreamxPublicationService;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.StreamxPublicationService;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.streamx.aem.connector.blueprints;
 
 import com.streamx.blueprints.data.RenderingContext;
 import com.streamx.blueprints.data.RenderingContext.OutputFormat;
-import dev.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.ResourceInfo;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.StringUtils;
@@ -62,12 +62,17 @@ public class RenderingContextPublicationHandler extends BasePublicationHandler<R
   }
 
   @Override
-  protected String getPublicationChannel() {
-    return config.get().publication_channel();
+  protected String getPublishEventType() {
+    return config.get().publish_event_type();
   }
 
   @Override
-  protected RenderingContext generateModel(Resource resource, ResourceResolver resourceResolver) {
+  protected String getUnpublishEventType() {
+    return config.get().unpublish_event_type();
+  }
+
+  @Override
+  protected RenderingContext getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     ValueMap properties = Optional.ofNullable(resource.getChild("jcr:content"))
         .map(Resource::getValueMap)
         .orElse(ValueMap.EMPTY);
@@ -89,5 +94,10 @@ public class RenderingContextPublicationHandler extends BasePublicationHandler<R
     LOG.info("Cannot prepare publish data for {}. Resource doesn't contain required properties.",
         resource.getPath());
     return null;
+  }
+
+  @Override
+  protected RenderingContext getUnpublishPayload(ResourceInfo resourceInfo) {
+      return null;
   }
 }

@@ -1,5 +1,6 @@
 package com.streamx.aem.connector.blueprints;
 
+import com.streamx.blueprints.data.Asset;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -25,10 +26,18 @@ public @interface AssetResourcePathPublicationHandlerConfig {
   String assets_path_regexp() default "^/content/.+\\.coreimg\\..+$";
 
   @AttributeDefinition(
-      name = "Publications Channel Name",
-      description = "Name of the channel in StreamX to publish assets to.",
+      name = "Publish Event Type",
+      description = "Publish event type of data to be ingested by StreamX.",
       type = AttributeType.STRING,
-      defaultValue = "assets"
+      defaultValue = Asset.TYPE_PUBLISHED
   )
-  String publication_channel() default "assets";
+  String publish_event_type() default Asset.TYPE_PUBLISHED;
+
+  @AttributeDefinition(
+      name = "Unpublish Event Type",
+      description = "Unpublish event type of data to be ingested by StreamX.",
+      type = AttributeType.STRING,
+      defaultValue = Asset.TYPE_UNPUBLISHED
+  )
+  String unpublish_event_type() default Asset.TYPE_UNPUBLISHED;
 }

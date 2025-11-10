@@ -1,23 +1,34 @@
 package com.streamx.blueprints.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- * Represents configuration defining what should be rendered. Relates to {@link Renderer} and {@link Data}.
+ * Represents configuration defining what should be rendered. Relates to {@link Renderer} and
+ * {@link Data}.
  */
 public class RenderingContext {
 
-  private String rendererKey;
-  private String dataKeyMatchPattern;
-  private String dataTypeMatchPattern;
-  private String outputKeyTemplate;
-  private String outputTypeTemplate;
-  private OutputFormat outputFormat;
+  public static final String TYPE_PUBLISHED =
+      "com.streamx.blueprints.rendering-context.published.v1";
+  public static final String TYPE_UNPUBLISHED =
+      "com.streamx.blueprints.rendering-context.unpublished.v1";
 
-  public RenderingContext() {
-  }
+  private final String rendererKey;
+  private final String dataKeyMatchPattern;
+  private final String dataTypeMatchPattern;
+  private final String outputKeyTemplate;
+  private final String outputTypeTemplate;
+  private final OutputFormat outputFormat;
 
-  public RenderingContext(String rendererKey, String dataKeyMatchPattern,
-      String dataTypeMatchPattern, String outputKeyTemplate, String outputTypeTemplate,
-      OutputFormat outputFormat) {
+  @JsonCreator
+  public RenderingContext(
+      @JsonProperty("rendererKey") String rendererKey,
+      @JsonProperty("dataKeyMatchPattern") String dataKeyMatchPattern,
+      @JsonProperty("dataTypeMatchPattern") String dataTypeMatchPattern,
+      @JsonProperty("outputKeyTemplate") String outputKeyTemplate,
+      @JsonProperty("outputTypeTemplate") String outputTypeTemplate,
+      @JsonProperty("outputFormat") OutputFormat outputFormat) {
     this.rendererKey = rendererKey;
     this.dataKeyMatchPattern = dataKeyMatchPattern;
     this.dataTypeMatchPattern = dataTypeMatchPattern;
