@@ -1,7 +1,5 @@
 package com.streamx.blueprints.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.streamx.aem.connector.blueprints.ByteBuffers;
 import java.nio.ByteBuffer;
 
@@ -13,8 +11,7 @@ abstract class Resource {
   private final ByteBuffer content;
   private final String type;
 
-  @JsonCreator
-  public Resource(@JsonProperty("content") ByteBuffer content, @JsonProperty("type") String type) {
+  public Resource(ByteBuffer content, String type) {
     this.content = content;
     this.type = type;
   }

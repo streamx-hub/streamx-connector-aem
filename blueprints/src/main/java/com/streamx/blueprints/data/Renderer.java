@@ -1,7 +1,5 @@
 package com.streamx.blueprints.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.streamx.aem.connector.blueprints.ByteBuffers;
 import java.nio.ByteBuffer;
 
@@ -15,8 +13,7 @@ public class Renderer {
 
   private final ByteBuffer template;
 
-  @JsonCreator
-  public Renderer(@JsonProperty("content") ByteBuffer template) {
+  public Renderer(ByteBuffer template) {
     this.template = template;
   }
 

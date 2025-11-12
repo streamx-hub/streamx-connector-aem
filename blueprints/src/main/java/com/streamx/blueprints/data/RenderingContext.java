@@ -1,8 +1,5 @@
 package com.streamx.blueprints.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Represents configuration defining what should be rendered. Relates to {@link Renderer} and
  * {@link Data}.
@@ -21,14 +18,13 @@ public class RenderingContext {
   private final String outputTypeTemplate;
   private final OutputFormat outputFormat;
 
-  @JsonCreator
   public RenderingContext(
-      @JsonProperty("rendererKey") String rendererKey,
-      @JsonProperty("dataKeyMatchPattern") String dataKeyMatchPattern,
-      @JsonProperty("dataTypeMatchPattern") String dataTypeMatchPattern,
-      @JsonProperty("outputKeyTemplate") String outputKeyTemplate,
-      @JsonProperty("outputTypeTemplate") String outputTypeTemplate,
-      @JsonProperty("outputFormat") OutputFormat outputFormat) {
+      String rendererKey,
+      String dataKeyMatchPattern,
+      String dataTypeMatchPattern,
+      String outputKeyTemplate,
+      String outputTypeTemplate,
+      OutputFormat outputFormat) {
     this.rendererKey = rendererKey;
     this.dataKeyMatchPattern = dataKeyMatchPattern;
     this.dataTypeMatchPattern = dataTypeMatchPattern;
