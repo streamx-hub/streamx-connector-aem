@@ -3,7 +3,6 @@ package com.streamx.aem.connector.blueprints;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.streamx.aem.connector.test.util.OsgiConfigUtils;
 import com.streamx.aem.connector.test.util.ResourceInfoFactory;
 import com.streamx.blueprints.data.Asset;
