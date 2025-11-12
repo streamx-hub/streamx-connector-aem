@@ -33,7 +33,8 @@ import org.junit.jupiter.api.Test;
 /**
  * The test enables integration testing of the AEM Connector.
  * Prerequisites:
- *  - running AEM instance with the Connector deployed
+ *  - running AEM instance
+ *  - the Connector deployed on AEM (can be achieved by running "mvn clean install -PautoInstallSinglePackage" from the project's root directory)
  *  - running StreamX instance
  *  - src/test/resources/application-integration.properties file with the following settings (sample values given for demonstration)
  *     aem.author.url=http://localhost:4502

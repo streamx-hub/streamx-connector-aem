@@ -68,15 +68,15 @@ public class FragmentPublicationHandler extends BasePublicationHandler<Fragment>
   @Override
   protected Fragment getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     String content = pageDataService.readContentAsHtml(resource, resourceResolver);
-    return new Fragment(content, getResourceType(resourceInfo));
+    return new Fragment(content, getStreamxResourceType(resourceInfo));
   }
 
   @Override
   protected Fragment getUnpublishPayload(ResourceInfo resourceInfo) {
-    return new Fragment((ByteBuffer) null, getResourceType(resourceInfo));
+    return new Fragment((ByteBuffer) null, getStreamxResourceType(resourceInfo));
   }
 
-  private String getResourceType(ResourceInfo resourceInfo) {
+  private String getStreamxResourceType(ResourceInfo resourceInfo) {
     return readProperty(resourceInfo,
         config.get().rel_path_to_node_with_jcr_prop_for_streamx_resource_type(),
         config.get().jcr_prop_name_for_streamx_resource_type()

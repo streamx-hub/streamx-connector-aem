@@ -101,15 +101,15 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
         extensionToAppend.get(),
         resourceResolver
     );
-    return new Data(content, getResourceType(resourceInfo));
+    return new Data(content, getStreamxResourceType(resourceInfo));
   }
 
   @Override
   protected Data getUnpublishPayload(ResourceInfo resourceInfo) {
-    return new Data((ByteBuffer) null, getResourceType(resourceInfo));
+    return new Data((ByteBuffer) null, getStreamxResourceType(resourceInfo));
   }
 
-  private String getResourceType(ResourceInfo resourceInfo) {
+  private String getStreamxResourceType(ResourceInfo resourceInfo) {
     return readProperty(resourceInfo,
         relPathToNodeWithJcrPropForResourceType.get(),
         jcrPropNameForResourceType.get()

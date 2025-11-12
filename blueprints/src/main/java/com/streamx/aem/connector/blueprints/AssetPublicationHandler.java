@@ -87,7 +87,7 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
 
   @Override
   protected Asset getUnpublishPayload(ResourceInfo resourceInfo) {
-    return new Asset(null, getResourceType(resourceInfo));
+    return new Asset(null, getStreamxResourceType(resourceInfo));
   }
 
   private static boolean isContentFragment(Resource existingAssetResource) {
@@ -108,10 +108,10 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
         .or(() -> new SimpleInternalRequest(slingUri, slingRequestProcessor, resourceResolver).getResponseAsInputStream())
         .orElseThrow();
 
-    return new Asset(InputStreamConverter.toByteBuffer(assetContentStream), getResourceType(resourceInfo));
+    return new Asset(InputStreamConverter.toByteBuffer(assetContentStream), getStreamxResourceType(resourceInfo));
   }
 
-  private String getResourceType(ResourceInfo resourceInfo) {
+  private String getStreamxResourceType(ResourceInfo resourceInfo) {
     return readProperty(resourceInfo, config.get().jcr_prop_name_for_streamx_resource_type());
   }
 
