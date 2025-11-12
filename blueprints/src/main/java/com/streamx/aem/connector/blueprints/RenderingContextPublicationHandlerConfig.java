@@ -10,7 +10,7 @@ public @interface RenderingContextPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Publish Event Type",
-      description = "Publish event type of data to be ingested by StreamX.",
+      description = "Publish event type of Rendering Contexts to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = RenderingContext.TYPE_PUBLISHED
   )
@@ -18,7 +18,7 @@ public @interface RenderingContextPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Unpublish Event Type",
-      description = "Unpublish event type of data to be ingested by StreamX.",
+      description = "Unpublish event type of Rendering Contexts to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = RenderingContext.TYPE_UNPUBLISHED
   )

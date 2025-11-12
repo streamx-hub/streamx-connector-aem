@@ -12,7 +12,7 @@ public @interface FragmentPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Publish Event Type",
-      description = "Publish event type of data to be ingested by StreamX.",
+      description = "Publish event type of Fragments to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = Fragment.TYPE_PUBLISHED
   )
@@ -20,7 +20,7 @@ public @interface FragmentPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Unpublish Event Type",
-      description = "Unpublish event type of data to be ingested by StreamX.",
+      description = "Unpublish event type of Fragments to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = Fragment.TYPE_UNPUBLISHED
   )

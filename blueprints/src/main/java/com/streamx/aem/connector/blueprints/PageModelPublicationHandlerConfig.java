@@ -12,7 +12,7 @@ public @interface PageModelPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Publish Event Type",
-      description = "Publish event type of data to be ingested by StreamX.",
+      description = "Publish event type of Data to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = Data.TYPE_PUBLISHED
   )
@@ -20,7 +20,7 @@ public @interface PageModelPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Unpublish Event Type",
-      description = "Unpublish event type of data to be ingested by StreamX.",
+      description = "Unpublish event type of Data to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = Data.TYPE_UNPUBLISHED
   )

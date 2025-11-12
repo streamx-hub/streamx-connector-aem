@@ -27,7 +27,7 @@ public @interface ClientlibsPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Publish Event Type",
-      description = "Publish event type of data to be ingested by StreamX.",
+      description = "Publish event type of Web Resources to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = WebResource.TYPE_PUBLISHED
   )
@@ -35,7 +35,7 @@ public @interface ClientlibsPublicationHandlerConfig {
 
   @AttributeDefinition(
       name = "Unpublish Event Type",
-      description = "Unpublish event type of data to be ingested by StreamX.",
+      description = "Unpublish event type of Web Resources to be ingested by StreamX.",
       type = AttributeType.STRING,
       defaultValue = WebResource.TYPE_UNPUBLISHED
   )
