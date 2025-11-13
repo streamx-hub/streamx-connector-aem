@@ -50,12 +50,14 @@ class PagePublicationHandlerTest {
 
     String expectedSubject = "/content/pages/usual-aem-page.html";
     PagePublicationHandler handler = context.registerInjectActivateService(PagePublicationHandler.class);
-    PublishData<Page> publishData = handler.getPublishData(resourceInfo);
-    UnpublishData<Page> unpublishData = handler.getUnpublishData(resourceInfo);
     assertThat(handler.canHandle(resourceInfo)).isTrue();
+
+    PublishData<Page> publishData = handler.getPublishData(resourceInfo);
     assertThat(publishData.getData().getContent().array()).hasSize(BINARY_DATA_LENGTH);
     assertThat(publishData.getSubject()).isEqualTo(expectedSubject);
     assertThat(publishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
+
+    UnpublishData<Page> unpublishData = handler.getUnpublishData(resourceInfo);
     assertThat(unpublishData.getSubject()).isEqualTo(expectedSubject);
     assertThat(unpublishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
 
@@ -74,9 +76,11 @@ class PagePublicationHandlerTest {
     assertThat(handler.canHandle(resourceInfo)).isTrue();
 
     PublishData<Page> publishData = handler.getPublishData(resourceInfo);
+    assertThat(publishData.getSubject()).isEqualTo(pagePath + ".html");
     assertThat(publishData.getData().getType()).isNull();
 
     UnpublishData<Page> unpublishData = handler.getUnpublishData(resourceInfo);
+    assertThat(unpublishData.getSubject()).isEqualTo(pagePath + ".html");
     assertThat(unpublishData.getData().getType()).isNull();
   }
 }

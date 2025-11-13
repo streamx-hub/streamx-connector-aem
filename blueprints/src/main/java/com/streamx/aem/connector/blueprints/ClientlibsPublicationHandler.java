@@ -5,6 +5,7 @@ import com.streamx.sling.connector.PublicationHandler;
 import com.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandler;
 import com.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandlerConfig;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.engine.SlingRequestProcessor;
@@ -68,8 +69,13 @@ public class ClientlibsPublicationHandler extends ResourcePathPublicationHandler
   }
 
   @Override
-  public WebResource data(InputStream inputStream) {
+  public WebResource payloadForPublish(InputStream inputStream) {
     return new WebResource(InputStreamConverter.toByteBuffer(inputStream), null);
+  }
+
+  @Override
+  protected WebResource payloadForUnpublish() {
+    return new WebResource((ByteBuffer) null, null);
   }
 
   @Override

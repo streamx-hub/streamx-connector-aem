@@ -9,6 +9,7 @@ import com.streamx.blueprints.data.Asset;
 import com.streamx.sling.connector.PublishData;
 import com.streamx.sling.connector.ResourceInfo;
 import com.streamx.sling.connector.StreamxPublicationException;
+import com.streamx.sling.connector.UnpublishData;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.util.Map;
@@ -94,6 +95,10 @@ class AssetResourcePathPublicationHandlerTest {
       assertThat(publishData.getSubject()).isEqualTo(assetPath);
       assertThat(publishData.getData()).isInstanceOf(Asset.class);
       assertThat(publishData.getData().getType()).isNull();
+
+      UnpublishData<Asset> unpublishData = handler.getUnpublishData(resourceInfo);
+      assertThat(unpublishData.getSubject()).isEqualTo(assetPath);
+      assertThat(unpublishData.getData().getType()).isNull();
 
       OsgiConfigUtils.disableHandler(handler, context);
       assertThat(handler.canHandle(resourceInfo)).isFalse();

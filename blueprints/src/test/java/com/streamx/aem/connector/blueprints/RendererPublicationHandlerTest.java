@@ -44,17 +44,19 @@ class RendererPublicationHandlerTest {
   @Test
   void mustHandle() {
     String pageTemplatePath = "/content/experience-fragments/templates/template";
+    assertThat(context.resourceResolver().getResource(pageTemplatePath)).isNotNull();
     ResourceInfo pageTemplateResource = ResourceInfoFactory.page(pageTemplatePath);
     String expectedSubject = "/content/experience-fragments/templates/template.html";
     RendererPublicationHandler handler = context.registerInjectActivateService(
         RendererPublicationHandler.class
     );
-    PublishData<Renderer> publishData = handler.getPublishData(pageTemplateResource);
-    UnpublishData<Renderer> unpublishData = handler.getUnpublishData(pageTemplateResource);
-    assertThat(context.resourceResolver().getResource(pageTemplatePath)).isNotNull();
     assertThat(handler.canHandle(pageTemplateResource)).isTrue();
+
+    PublishData<Renderer> publishData = handler.getPublishData(pageTemplateResource);
     assertThat(publishData.getData().getTemplate().array()).hasSize(BINARY_DATA_LENGTH);
     assertThat(publishData.getSubject()).isEqualTo(expectedSubject);
+
+    UnpublishData<Renderer> unpublishData = handler.getUnpublishData(pageTemplateResource);
     assertThat(unpublishData.getSubject()).isEqualTo(expectedSubject);
 
     OsgiConfigUtils.disableHandler(handler, context);

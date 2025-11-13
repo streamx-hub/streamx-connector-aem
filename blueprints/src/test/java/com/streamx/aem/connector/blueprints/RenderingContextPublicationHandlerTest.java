@@ -44,6 +44,7 @@ class RenderingContextPublicationHandlerTest {
   @Test
   void mustHandle() {
     String resourcePath = "/content/experience-fragments/templates/sample-rendering-context";
+    assertThat(context.resourceResolver().getResource(resourcePath)).isNotNull();
     ResourceInfo resource = ResourceInfoFactory.page(resourcePath);
     String expectedSubject = "/content/experience-fragments/templates/sample-rendering-context";
     RenderingContextPublicationHandler handler = context.registerInjectActivateService(
@@ -62,7 +63,6 @@ class RenderingContextPublicationHandlerTest {
     assertThat(renderingContext.getOutputFormat()).isSameAs(OutputFormat.PAGE);
 
     UnpublishData<RenderingContext> unpublishData = handler.getUnpublishData(resource);
-    assertThat(context.resourceResolver().getResource(resourcePath)).isNotNull();
     assertThat(unpublishData.getSubject()).isEqualTo(expectedSubject);
 
     OsgiConfigUtils.disableHandler(handler, context);

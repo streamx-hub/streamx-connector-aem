@@ -68,8 +68,13 @@ public class AssetResourcePathPublicationHandler extends ResourcePathPublication
   }
 
   @Override
-  public Asset data(InputStream inputStream) {
+  protected Asset payloadForPublish(InputStream inputStream) {
     return new Asset(InputStreamConverter.toByteBuffer(inputStream), null);
+  }
+
+  @Override
+  protected Asset payloadForUnpublish() {
+    return new Asset(null, null);
   }
 
   @Override

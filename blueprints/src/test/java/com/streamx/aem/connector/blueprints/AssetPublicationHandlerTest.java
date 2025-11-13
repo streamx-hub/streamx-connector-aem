@@ -86,6 +86,7 @@ class AssetPublicationHandlerTest {
     );
     ResourceInfo resourceInfo = ResourceInfoFactory.asset(assetPath);
     assertThat(handler.canHandle(resourceInfo)).isTrue();
+
     PublishData<Asset> publishData = handler.getPublishData(resourceInfo);
     assertThat(publishData.getData().getContent().array()).hasSize(DATA_SIZE);
     assertThat(publishData.getSubject()).isEqualTo(assetPath);
@@ -113,5 +114,6 @@ class AssetPublicationHandlerTest {
 
     UnpublishData<Asset> unpublishData = handler.getUnpublishData(resourceInfo);
     assertThat(unpublishData.getSubject()).isEqualTo(contentFragmentPath);
+    assertThat(unpublishData.getData().getType()).isNull();
   }
 }

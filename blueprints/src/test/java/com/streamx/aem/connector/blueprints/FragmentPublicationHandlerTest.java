@@ -59,12 +59,14 @@ class FragmentPublicationHandlerTest {
 
     String expectedSubject = "/content/experience-fragments/fragment.html";
     FragmentPublicationHandler handler = context.registerInjectActivateService(FragmentPublicationHandler.class);
-    PublishData<Fragment> publishData = handler.getPublishData(fragmentResourceInfo);
-    UnpublishData<Fragment> unpublishData = handler.getUnpublishData(fragmentResourceInfo);
     assertThat(handler.canHandle(fragmentResourceInfo)).isTrue();
+
+    PublishData<Fragment> publishData = handler.getPublishData(fragmentResourceInfo);
     assertThat(publishData.getData().getContent().array()).hasSize(BINARY_DATA_LENGTH);
     assertThat(publishData.getSubject()).isEqualTo(expectedSubject);
     assertThat(publishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
+
+    UnpublishData<Fragment> unpublishData = handler.getUnpublishData(fragmentResourceInfo);
     assertThat(unpublishData.getSubject()).isEqualTo(expectedSubject);
     assertThat(unpublishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
 
