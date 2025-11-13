@@ -1,6 +1,6 @@
 package com.streamx.blueprints.data;
 
-import com.streamx.aem.connector.blueprints.ByteBuffers;
+import com.streamx.aem.connector.blueprints.tools.ByteBuffers;
 import java.nio.ByteBuffer;
 
 /**
