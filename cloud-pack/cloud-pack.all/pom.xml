@@ -57,11 +57,6 @@
                             <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
-                            <groupId>org.apache.avro</groupId>
-                            <artifactId>avro</artifactId>
-                            <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
-                        </embedded>
-                        <embedded>
                             <groupId>org.apache.felix</groupId>
                             <artifactId>org.apache.felix.configadmin.plugin.interpolation</artifactId>
                             <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
@@ -186,11 +181,6 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.16.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.11.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
