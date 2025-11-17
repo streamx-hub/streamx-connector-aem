@@ -10,8 +10,8 @@
         </layout>
     </appender>
 
-    <!--    &lt;!&ndash; Define a logger for the package "dev.streamx" &ndash;&gt;-->
-    <!--    <logger name="dev.streamx" level="TRACE">-->
+    <!--    &lt;!&ndash; Define a logger for the package "com.streamx" &ndash;&gt;-->
+    <!--    <logger name="com.streamx" level="TRACE">-->
     <!--        <appender-ref ref="STDOUT"/>-->
     <!--    </logger>-->
 
