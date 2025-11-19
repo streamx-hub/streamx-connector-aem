@@ -30,8 +30,8 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
   private final AtomicReference<Pattern> pageResourcePathRegex = new AtomicReference<>();
   private final AtomicReference<String[]> selectorsToAppend = new AtomicReference<>();
   private final AtomicReference<String> extensionToAppend = new AtomicReference<>();
-  private final AtomicReference<String> relPathToNodeWithJcrPropForResourceType = new AtomicReference<>();
-  private final AtomicReference<String> jcrPropNameForResourceType = new AtomicReference<>();
+  private final AtomicReference<String> relPathToNodeWithJcrPropForStreamxResourceType = new AtomicReference<>();
+  private final AtomicReference<String> jcrPropNameForStreamxResourceType = new AtomicReference<>();
 
   @Activate
   public PageModelPublicationHandler(
@@ -55,8 +55,8 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
 
     selectorsToAppend.set(Optional.ofNullable(config.selectors_to_append()).orElse(new String[0]));
     extensionToAppend.set(config.extension_to_append());
-    relPathToNodeWithJcrPropForResourceType.set(config.rel_path_to_node_with_jcr_prop_for_streamx_resource_type());
-    jcrPropNameForResourceType.set(config.jcr_prop_name_for_streamx_resource_type());
+    relPathToNodeWithJcrPropForStreamxResourceType.set(config.rel_path_to_node_with_jcr_prop_for_streamx_resource_type());
+    jcrPropNameForStreamxResourceType.set(config.jcr_prop_name_for_streamx_resource_type());
   }
 
   @Override
@@ -111,8 +111,8 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
 
   private String getStreamxResourceType(ResourceInfo resourceInfo) {
     return readProperty(resourceInfo,
-        relPathToNodeWithJcrPropForResourceType.get(),
-        jcrPropNameForResourceType.get()
+        relPathToNodeWithJcrPropForStreamxResourceType.get(),
+        jcrPropNameForStreamxResourceType.get()
     );
   }
 
