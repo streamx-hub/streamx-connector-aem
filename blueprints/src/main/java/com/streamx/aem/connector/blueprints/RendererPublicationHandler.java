@@ -1,7 +1,7 @@
 package com.streamx.aem.connector.blueprints;
 
 import com.streamx.blueprints.data.Renderer;
-import dev.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.ResourceInfo;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -53,18 +53,28 @@ public class RendererPublicationHandler extends BasePublicationHandler<Renderer>
   }
 
   @Override
-  protected String getPublicationChannel() {
-    return config.get().publication_channel();
+  protected String getPublishEventType() {
+    return config.get().publish_event_type();
   }
 
   @Override
-  protected Renderer generateModel(Resource resource, ResourceResolver resourceResolver) {
+  protected String getUnpublishEventType() {
+    return config.get().unpublish_event_type();
+  }
+
+  @Override
+  protected Renderer getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver) {
     String content = pageDataService.readContentAsHtml(resource, resourceResolver);
     return new Renderer(content);
   }
 
   @Override
-  protected String getPublicationKey(String resourcePath) {
+  protected Renderer getUnpublishPayload(ResourceInfo resourceInfo) {
+    return null;
+  }
+
+  @Override
+  protected String getPublicationSubject(String resourcePath) {
     return resourcePath + ".html";
   }
 }

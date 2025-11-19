@@ -6,9 +6,9 @@ import static org.mockito.Mockito.mock;
 import com.streamx.aem.connector.test.util.OsgiConfigUtils;
 import com.streamx.aem.connector.test.util.ResourceInfoFactory;
 import com.streamx.blueprints.data.Asset;
-import dev.streamx.sling.connector.PublishData;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.UnpublishData;
+import com.streamx.sling.connector.PublishData;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.UnpublishData;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.io.ByteArrayInputStream;
@@ -81,22 +81,21 @@ class AssetPublicationHandlerTest {
     AssetPublicationHandler handler = context.registerInjectActivateService(
         AssetPublicationHandler.class, Map.of(
             "enabled", true,
-            "jcr.prop.name.for.sx.type", "jcr:primaryType"
+            "jcr.prop.name.for.streamx.resource.type", "jcr:primaryType"
         )
     );
     ResourceInfo resourceInfo = ResourceInfoFactory.asset(assetPath);
     assertThat(handler.canHandle(resourceInfo)).isTrue();
+
     PublishData<Asset> publishData = handler.getPublishData(resourceInfo);
-    assertThat(publishData.getModel().getContent().array()).hasSize(DATA_SIZE);
-    assertThat(publishData.getKey()).isEqualTo(assetPath);
-    assertThat(publishData.getChannel()).isEqualTo("assets");
-    assertThat(publishData.getModel()).isInstanceOf(Asset.class);
-    assertThat(publishData.getProperties()).containsEntry(BasePublicationHandler.SX_TYPE, "dam:Asset");
+    assertThat(publishData.getData().getContent().array()).hasSize(DATA_SIZE);
+    assertThat(publishData.getSubject()).isEqualTo(assetPath);
+    assertThat(publishData.getData()).isInstanceOf(Asset.class);
+    assertThat(publishData.getData().getType()).isEqualTo("dam:Asset");
 
     UnpublishData<Asset> unpublishData = handler.getUnpublishData(resourceInfo);
-    assertThat(unpublishData.getKey()).isEqualTo(assetPath);
-    assertThat(unpublishData.getChannel()).isEqualTo("assets");
-    assertThat(unpublishData.getProperties()).containsEntry(BasePublicationHandler.SX_TYPE, "dam:Asset");
+    assertThat(unpublishData.getSubject()).isEqualTo(assetPath);
+    assertThat(unpublishData.getData().getType()).isEqualTo("dam:Asset");
 
     OsgiConfigUtils.disableHandler(handler, context);
     assertThat(handler.canHandle(resourceInfo)).isFalse();
@@ -114,7 +113,7 @@ class AssetPublicationHandlerTest {
     assertThat(publishData).isNull();
 
     UnpublishData<Asset> unpublishData = handler.getUnpublishData(resourceInfo);
-    assertThat(unpublishData.getKey()).isEqualTo(contentFragmentPath);
-    assertThat(unpublishData.getChannel()).isEqualTo("assets");
+    assertThat(unpublishData.getSubject()).isEqualTo(contentFragmentPath);
+    assertThat(unpublishData.getData().getType()).isNull();
   }
 }

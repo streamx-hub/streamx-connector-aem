@@ -1,12 +1,9 @@
 package com.streamx.aem.connector.blueprints;
 
-import dev.streamx.sling.connector.PublicationHandler;
-import dev.streamx.sling.connector.PublishData;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.UnpublishData;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collections;
-import java.util.Map;
+import com.streamx.sling.connector.PublicationHandler;
+import com.streamx.sling.connector.PublishData;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.UnpublishData;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -16,15 +13,12 @@ import org.slf4j.LoggerFactory;
 
 abstract class BasePublicationHandler<T> implements PublicationHandler<T> {
 
-  static final String SX_TYPE = "sx:type";
   private static final Logger LOG = LoggerFactory.getLogger(BasePublicationHandler.class);
 
   private final ResourceResolverFactory resolverFactory;
-  private final Class<T> dataClass;
 
   BasePublicationHandler(ResourceResolverFactory resolverFactory) {
     this.resolverFactory = resolverFactory;
-    dataClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
   }
 
   @Override
@@ -42,17 +36,15 @@ abstract class BasePublicationHandler<T> implements PublicationHandler<T> {
         return null;
       }
 
-      T model = generateModel(resource, resourceResolver);
-      if (model == null) {
+      T payload = getPublishPayload(resourceInfo, resource, resourceResolver);
+      if (payload == null) {
         return null;
       }
 
       return new PublishData<>(
-          getPublicationKey(resourcePath),
-          getPublicationChannel(),
-          dataClass,
-          model,
-          getMessageProperties(resourceInfo)
+          getPublicationSubject(resourcePath),
+          getPublishEventType(),
+          payload
       );
     }
   }
@@ -60,24 +52,23 @@ abstract class BasePublicationHandler<T> implements PublicationHandler<T> {
   @Override
   public final UnpublishData<T> getUnpublishData(ResourceInfo resourceInfo) {
     return new UnpublishData<>(
-        getPublicationKey(resourceInfo.getPath()),
-        getPublicationChannel(),
-        dataClass,
-        getMessageProperties(resourceInfo)
+        getPublicationSubject(resourceInfo.getPath()),
+        getUnpublishEventType(),
+        getUnpublishPayload(resourceInfo)
     );
   }
 
-  protected String getPublicationKey(String resourcePath) {
+  protected String getPublicationSubject(String resourcePath) {
     return resourcePath;
   }
 
-  protected Map<String, String> getMessageProperties(ResourceInfo resourceInfo) {
-    return Collections.emptyMap();
-  }
+  protected abstract String getPublishEventType();
 
-  protected abstract String getPublicationChannel();
+  protected abstract String getUnpublishEventType();
 
-  protected abstract T generateModel(Resource resource, ResourceResolver resourceResolver);
+  protected abstract T getPublishPayload(ResourceInfo resourceInfo, Resource resource, ResourceResolver resourceResolver);
+
+  protected abstract T getUnpublishPayload(ResourceInfo resourceInfo);
 
   protected ResourceResolver createResourceResolver() {
     try {
@@ -87,15 +78,11 @@ abstract class BasePublicationHandler<T> implements PublicationHandler<T> {
     }
   }
 
-  protected static Map<String, String> getSxTypeAsMap(ResourceInfo resourceInfo, String childRelativePath, String jcrPropertyForSxType) {
-    return getSxTypeAsMap(resourceInfo, childRelativePath + "/" + jcrPropertyForSxType);
+  protected static String readProperty(ResourceInfo resourceInfo, String parent, String child) {
+    return readProperty(resourceInfo, parent + "/" + child);
   }
 
-  protected static Map<String, String> getSxTypeAsMap(ResourceInfo resourceInfo, String jcrPropertyForSxType) {
-    String sxType = resourceInfo.getProperty(jcrPropertyForSxType);
-    if (sxType == null) {
-      return Collections.emptyMap();
-    }
-    return Map.of(SX_TYPE, sxType);
+  protected static String readProperty(ResourceInfo resourceInfo, String path) {
+    return resourceInfo.getProperty(path);
   }
 }

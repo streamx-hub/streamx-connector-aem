@@ -2,9 +2,9 @@ package com.streamx.aem.connector.impl;
 
 import com.day.cq.replication.ReplicationAction;
 import com.day.cq.replication.ReplicationActionType;
-import dev.streamx.sling.connector.PublicationAction;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.StreamxPublicationService;
+import com.streamx.sling.connector.PublicationAction;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.StreamxPublicationService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

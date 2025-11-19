@@ -2,14 +2,14 @@
 
 This repository contains the source code of AEM Connector. The purpose of AEM Connector is to serve as a bridge between [Adobe Experience Manager (AEM)](https://business.adobe.com/products/experience-manager/adobe-experience-manager.html) and [StreamX](https://www.streamx.dev/). AEM Connector should be installed on AEM, where it will be listening to all publish/unpublish events and respectively publish/unpublish the data to/from StreamX.
 
-It contains two modules: `Connector` and `Blueprints`. Both of them depend on the `dev.streamx:streamx-connector-sling` module and don't expose their own API.
+It contains two modules: `Connector` and `Blueprints`. Both of them depend on the `com.streamx:streamx-connector-sling` module and don't expose their own API.
 
 # Connector
 
 It provides an event handler that will listen for AEM replication events and automatically make
 publications to StreamX.
 Clients need to provide proper configuration for the `streamx-connector-sling` module and implement
-its `dev.streamx.sling.connector.PublicationHandler` interface to handle resources such as Pages and
+its `com.streamx.sling.connector.PublicationHandler` interface to handle resources such as Pages and
 Assets (or use the ones from `Blueprints` module).
 
 In current early implementation event handler listens for the following events which are fired only on Author instances:
@@ -113,7 +113,7 @@ The `streamx-connector-aem-blueprints` module includes a built-in handler: `com.
 This handler is designed to expose headless data, following the principles outlined in the [AEM Headless Content Services tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-with-aem-headless/content-services/overview).
 
 By default, the `PageModelPublicationHandler` retrieves pages with additional `model` selector and `json` extension,
-enabling the page model JSON payload to be sent to a StreamX `data` channel.
+enabling the page model JSON payload to be sent to StreamX with `com.streamx.blueprints.data.published.v1` event type.
 
 You can customize this behavior by editing the corresponding OSGi configuration: `com.streamx.aem.connector.blueprints.PageModelPublicationHandlerConfig`.
 

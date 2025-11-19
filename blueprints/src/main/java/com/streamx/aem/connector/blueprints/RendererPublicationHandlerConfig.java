@@ -1,5 +1,6 @@
 package com.streamx.aem.connector.blueprints;
 
+import com.streamx.blueprints.data.Renderer;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -8,12 +9,20 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 public @interface RendererPublicationHandlerConfig {
 
   @AttributeDefinition(
-      name = "Publications Channel Name",
-      description = "Name of the channel in StreamX to publish renderers to.",
+      name = "Publish Event Type",
+      description = "Publish event type of Renderers to be ingested by StreamX.",
       type = AttributeType.STRING,
-      defaultValue = "renderers"
+      defaultValue = Renderer.TYPE_PUBLISHED
   )
-  String publication_channel() default "renderers";
+  String publish_event_type() default Renderer.TYPE_PUBLISHED;
+
+  @AttributeDefinition(
+      name = "Unpublish Event Type",
+      description = "Unpublish event type of Renderers to be ingested by StreamX.",
+      type = AttributeType.STRING,
+      defaultValue = Renderer.TYPE_UNPUBLISHED
+  )
+  String unpublish_event_type() default Renderer.TYPE_UNPUBLISHED;
 
   @AttributeDefinition(
       name = "Is Enabled?",

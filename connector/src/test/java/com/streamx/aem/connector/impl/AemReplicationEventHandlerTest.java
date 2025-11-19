@@ -24,7 +24,7 @@ class AemReplicationEventHandlerTest extends BaseAemEventHandlerTest {
   }
 
   @Test
-  void shouldHandleEvents() throws Exception {
+  void shouldHandleEvents() {
     // given
     Event activate = new Event(
         ReplicationAction.EVENT_TOPIC,
@@ -87,7 +87,7 @@ class AemReplicationEventHandlerTest extends BaseAemEventHandlerTest {
   }
 
   @Test
-  void shouldNotHandleUnexpectedEvents() throws Exception {
+  void shouldNotHandleUnexpectedEvents() {
     // given
     Event event = new Event(
         "some/unexpected/event",

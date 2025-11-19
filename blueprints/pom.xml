@@ -44,7 +44,7 @@
     </dependency>
     <!-- StreamX -->
     <dependency>
-      <groupId>dev.streamx</groupId>
+      <groupId>com.streamx</groupId>
       <artifactId>streamx-connector-sling</artifactId>
     </dependency>
     <!-- Sling -->

@@ -1,7 +1,7 @@
 package com.streamx.aem.connector.test.util;
 
 
-import dev.streamx.sling.connector.PublicationHandler;
+import com.streamx.sling.connector.PublicationHandler;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import java.util.Map;
 import org.apache.sling.testing.mock.osgi.MockOsgi;

@@ -42,23 +42,18 @@
                             <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
-                            <groupId>dev.streamx</groupId>
+                            <groupId>com.streamx</groupId>
                             <artifactId>streamx-connector-sling</artifactId>
                             <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
-                            <groupId>dev.streamx</groupId>
+                            <groupId>com.streamx</groupId>
                             <artifactId>ingestion-client</artifactId>
                             <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
                             <groupId>org.jsoup</groupId>
                             <artifactId>jsoup</artifactId>
-                            <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
-                        </embedded>
-                        <embedded>
-                            <groupId>org.apache.avro</groupId>
-                            <artifactId>avro</artifactId>
                             <target>/apps/streamx-connector-aem-cloud-pack-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
@@ -173,24 +168,19 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>dev.streamx</groupId>
+            <groupId>com.streamx</groupId>
             <artifactId>streamx-connector-sling</artifactId>
             <version>${streamx-connector-sling.version}</version>
         </dependency>
         <dependency>
-            <groupId>dev.streamx</groupId>
+            <groupId>com.streamx</groupId>
             <artifactId>ingestion-client</artifactId>
-            <version>1.0.1</version>
+            <version>2.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.16.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.11.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>

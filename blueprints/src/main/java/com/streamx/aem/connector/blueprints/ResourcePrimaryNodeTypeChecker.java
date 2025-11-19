@@ -3,7 +3,7 @@ package com.streamx.aem.connector.blueprints;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.NameConstants;
 import com.drew.lang.annotations.NotNull;
-import dev.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.ResourceInfo;
 import java.util.Objects;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;

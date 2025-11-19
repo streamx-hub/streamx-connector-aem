@@ -6,9 +6,9 @@ import com.streamx.aem.connector.test.util.OsgiConfigUtils;
 import com.streamx.aem.connector.test.util.RandomBytesSlingRequestProcessor;
 import com.streamx.aem.connector.test.util.ResourceInfoFactory;
 import com.streamx.blueprints.data.Renderer;
-import dev.streamx.sling.connector.PublishData;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.UnpublishData;
+import com.streamx.sling.connector.PublishData;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.UnpublishData;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.sling.engine.SlingRequestProcessor;
@@ -44,20 +44,20 @@ class RendererPublicationHandlerTest {
   @Test
   void mustHandle() {
     String pageTemplatePath = "/content/experience-fragments/templates/template";
+    assertThat(context.resourceResolver().getResource(pageTemplatePath)).isNotNull();
     ResourceInfo pageTemplateResource = ResourceInfoFactory.page(pageTemplatePath);
-    String expectedKey = "/content/experience-fragments/templates/template.html";
+    String expectedSubject = "/content/experience-fragments/templates/template.html";
     RendererPublicationHandler handler = context.registerInjectActivateService(
         RendererPublicationHandler.class
     );
-    PublishData<Renderer> publishData = handler.getPublishData(pageTemplateResource);
-    UnpublishData<Renderer> unpublishData = handler.getUnpublishData(pageTemplateResource);
-    assertThat(context.resourceResolver().getResource(pageTemplatePath)).isNotNull();
     assertThat(handler.canHandle(pageTemplateResource)).isTrue();
-    assertThat(publishData.getModel().getTemplate().array()).hasSize(BINARY_DATA_LENGTH);
-    assertThat(publishData.getKey()).isEqualTo(expectedKey);
-    assertThat(publishData.getProperties()).doesNotContainKey(BasePublicationHandler.SX_TYPE);
-    assertThat(unpublishData.getKey()).isEqualTo(expectedKey);
-    assertThat(unpublishData.getProperties()).doesNotContainKey(BasePublicationHandler.SX_TYPE);
+
+    PublishData<Renderer> publishData = handler.getPublishData(pageTemplateResource);
+    assertThat(publishData.getData().getTemplate().array()).hasSize(BINARY_DATA_LENGTH);
+    assertThat(publishData.getSubject()).isEqualTo(expectedSubject);
+
+    UnpublishData<Renderer> unpublishData = handler.getUnpublishData(pageTemplateResource);
+    assertThat(unpublishData.getSubject()).isEqualTo(expectedSubject);
 
     OsgiConfigUtils.disableHandler(handler, context);
     assertThat(handler.canHandle(pageTemplateResource)).isFalse();

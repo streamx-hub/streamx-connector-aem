@@ -2,7 +2,7 @@ package com.streamx.aem.connector.test.util;
 
 import static java.util.Objects.requireNonNull;
 
-import dev.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.ResourceInfo;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import java.util.LinkedHashMap;
 import java.util.Map;

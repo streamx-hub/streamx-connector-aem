@@ -6,9 +6,9 @@ import com.streamx.aem.connector.test.util.OsgiConfigUtils;
 import com.streamx.aem.connector.test.util.RandomBytesSlingRequestProcessor;
 import com.streamx.aem.connector.test.util.ResourceInfoFactory;
 import com.streamx.blueprints.data.Fragment;
-import dev.streamx.sling.connector.PublishData;
-import dev.streamx.sling.connector.ResourceInfo;
-import dev.streamx.sling.connector.UnpublishData;
+import com.streamx.sling.connector.PublishData;
+import com.streamx.sling.connector.ResourceInfo;
+import com.streamx.sling.connector.UnpublishData;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import javax.jcr.RepositoryException;
@@ -57,16 +57,18 @@ class FragmentPublicationHandlerTest {
         context, fragmentPath, "jcr:primaryType", "jcr:content/cq:template"
     );
 
-    String expectedKey = "/content/experience-fragments/fragment.html";
+    String expectedSubject = "/content/experience-fragments/fragment.html";
     FragmentPublicationHandler handler = context.registerInjectActivateService(FragmentPublicationHandler.class);
-    PublishData<Fragment> publishData = handler.getPublishData(fragmentResourceInfo);
-    UnpublishData<Fragment> unpublishData = handler.getUnpublishData(fragmentResourceInfo);
     assertThat(handler.canHandle(fragmentResourceInfo)).isTrue();
-    assertThat(publishData.getModel().getContent().array()).hasSize(BINARY_DATA_LENGTH);
-    assertThat(publishData.getKey()).isEqualTo(expectedKey);
-    assertThat(publishData.getProperties()).containsEntry(BasePublicationHandler.SX_TYPE, "/conf/firsthops/settings/wcm/templates/page-content");
-    assertThat(unpublishData.getKey()).isEqualTo(expectedKey);
-    assertThat(unpublishData.getProperties()).containsEntry(BasePublicationHandler.SX_TYPE, "/conf/firsthops/settings/wcm/templates/page-content");
+
+    PublishData<Fragment> publishData = handler.getPublishData(fragmentResourceInfo);
+    assertThat(publishData.getData().getContent().array()).hasSize(BINARY_DATA_LENGTH);
+    assertThat(publishData.getSubject()).isEqualTo(expectedSubject);
+    assertThat(publishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
+
+    UnpublishData<Fragment> unpublishData = handler.getUnpublishData(fragmentResourceInfo);
+    assertThat(unpublishData.getSubject()).isEqualTo(expectedSubject);
+    assertThat(unpublishData.getData().getType()).isEqualTo("/conf/firsthops/settings/wcm/templates/page-content");
 
     OsgiConfigUtils.disableHandler(handler, context);
     assertThat(handler.canHandle(fragmentResourceInfo)).isFalse();
