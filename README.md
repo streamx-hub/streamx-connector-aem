@@ -108,14 +108,14 @@ public class StreamxExperienceFragmentModel {
 
 ## Exposing headless data
 
-The `streamx-connector-aem-blueprints` module includes a built-in handler: `com.streamx.aem.connector.blueprints.PageModelPublicationHandler`.
+The `streamx-connector-aem-blueprints` module includes a built-in handler: `com.streamx.aem.connector.blueprints.handlers.PageModelPublicationHandler`.
 
 This handler is designed to expose headless data, following the principles outlined in the [AEM Headless Content Services tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-with-aem-headless/content-services/overview).
 
 By default, the `PageModelPublicationHandler` retrieves pages with additional `model` selector and `json` extension,
 enabling the page model JSON payload to be sent to StreamX with `com.streamx.blueprints.data.published.v1` event type.
 
-You can customize this behavior by editing the corresponding OSGi configuration: `com.streamx.aem.connector.blueprints.PageModelPublicationHandlerConfig`.
+You can customize this behavior by editing the corresponding OSGi configuration: `com.streamx.aem.connector.blueprints.handlers.PageModelPublicationHandlerConfig`.
 
 # Usage:
 
