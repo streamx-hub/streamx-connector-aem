@@ -33,6 +33,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          # This will create settings.xml with server-id: central at ~/.m2/settings.xml
           server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
