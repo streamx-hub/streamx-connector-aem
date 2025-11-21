@@ -53,9 +53,7 @@
     <junit-bom.version>5.10.2</junit-bom.version>
     <mockito-junit-jupiter.version>5.12.0</mockito-junit-jupiter.version>
     <io.wcm.testing.aem-mock.junit5.version>5.6.4</io.wcm.testing.aem-mock.junit5.version>
-    <org.apache.sling.testing.sling-mock-oak.version>4.0.0-1.62.0
-    </org.apache.sling.testing.sling-mock-oak.version>
-    <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
+    <org.apache.sling.testing.sling-mock-oak.version>4.0.0-1.62.0</org.apache.sling.testing.sling-mock-oak.version>
   </properties>
 
   <repositories>
@@ -255,47 +253,6 @@
             </plugin>
           </plugins>
         </pluginManagement>
-      </build>
-    </profile>
-    <profile>
-      <id>ossrhDeploy</id>
-      <distributionManagement>
-        <repository>
-          <id>ossrh</id>
-          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-      </distributionManagement>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>${maven-gpg-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-                <configuration>
-                  <signer>bc</signer>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.central</groupId>
-            <artifactId>central-publishing-maven-plugin</artifactId>
-            <version>0.7.0</version>
-            <extensions>true</extensions>
-            <configuration>
-              <publishingServerId>central</publishingServerId>
-              <autoPublish>true</autoPublish>
-              <waitUntil>published</waitUntil>
-            </configuration>
-          </plugin>
-        </plugins>
       </build>
     </profile>
   </profiles>
