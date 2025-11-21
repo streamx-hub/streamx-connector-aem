@@ -69,6 +69,15 @@
     </repository>
   </repositories>
 
+  <distributionManagement>
+    <repository>
+      <id>streamx-maven-public-releases</id>
+      <url>
+        artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases
+      </url>
+    </repository>
+  </distributionManagement>
+
   <scm>
     <connection>scm:git:git@github.com:streamx-com/streamx-connector-aem.git</connection>
     <developerConnection>scm:git:git@github.com:streamx-com/streamx-connector-aem.git
