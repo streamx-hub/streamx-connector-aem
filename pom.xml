@@ -258,14 +258,6 @@
     </profile>
     <profile>
       <id>release</id>
-      <distributionManagement>
-        <repository>
-          <id>streamx-maven-public-releases</id>
-          <url>
-            artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases
-          </url>
-        </repository>
-      </distributionManagement>
       <build>
         <plugins>
           <plugin>
