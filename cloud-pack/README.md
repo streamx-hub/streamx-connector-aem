@@ -89,7 +89,7 @@ One method for installing the Cloud Package with AEM Connector is embedding it i
         -D aemVersion="cloud"
     ```
 
-2. Add the Cloud Package with AEM Connector as a dependency in the `dependencies` section of `all/pom.xml` and exclude the `com.streamx:ingestion-client` artifact:
+2. Add the Cloud Package with AEM Connector as a dependency in the `dependencies` section of `all/pom.xml`:
 
     ```xml
     <dependencies>
@@ -99,12 +99,6 @@ One method for installing the Cloud Package with AEM Connector is embedding it i
             <artifactId>streamx-connector-aem-cloud-pack-all</artifactId>
             <version>0.0.17</version>
             <type>zip</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.streamx</groupId>
-                    <artifactId>ingestion-client</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         ...
     </dependencies>
