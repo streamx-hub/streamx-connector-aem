@@ -26,6 +26,12 @@ public @interface PageModelPublicationHandlerConfig {
   )
   String unpublish_event_type() default Data.TYPE_UNPUBLISHED;
 
+  @AttributeDefinition(name = "Should add namespace prefix")
+  boolean should_add_namespace_prefix() default false;
+
+  @AttributeDefinition(name = "Namespace prefix")
+  String namespace_prefix() default "";
+
   @AttributeDefinition(
       name = "Is Enabled?",
       description = "Indicates whether the configured service is enabled "

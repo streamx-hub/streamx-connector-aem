@@ -42,6 +42,12 @@ public @interface AssetPublicationHandlerConfig {
   )
   String unpublish_event_type() default Asset.TYPE_UNPUBLISHED;
 
+  @AttributeDefinition(name = "Should add namespace prefix")
+  boolean should_add_namespace_prefix() default true;
+
+  @AttributeDefinition(name = "Namespace prefix")
+  String namespace_prefix() default "";
+
   @AttributeDefinition(
       name = "Name of JCR property for StreamX resource type",
       description = "If the resource that is being published has a JCR property with the specified "

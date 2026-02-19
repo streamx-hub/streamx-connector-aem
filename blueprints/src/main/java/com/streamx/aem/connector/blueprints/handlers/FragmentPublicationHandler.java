@@ -42,7 +42,9 @@ public class FragmentPublicationHandler extends BasePublicationHandler<Fragment>
     assignConfigValues(
         config.enabled(),
         config.publish_event_type(),
-        config.unpublish_event_type()
+        config.unpublish_event_type(),
+        config.should_add_namespace_prefix(),
+        config.namespace_prefix()
     );
     relPathToNodeWithJcrPropForStreamxResourceType.set(config.rel_path_to_node_with_jcr_prop_for_streamx_resource_type());
     jcrPropNameForStreamxResourceType.set(config.jcr_prop_name_for_streamx_resource_type());

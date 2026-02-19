@@ -1,5 +1,6 @@
 package com.streamx.aem.connector.blueprints.handlers;
 
+import com.streamx.aem.connector.blueprints.tools.NamespacePrefixAdder;
 import com.streamx.sling.connector.PublicationHandler;
 import com.streamx.sling.connector.PublishData;
 import com.streamx.sling.connector.ResourceInfo;
@@ -20,16 +21,22 @@ abstract class BasePublicationHandler<T> implements PublicationHandler<T> {
   private final ResourceResolverFactory resolverFactory;
   private final AtomicReference<String> publishEventType = new AtomicReference<>();
   private final AtomicReference<String> unpublishEventType = new AtomicReference<>();
+  private final AtomicBoolean shouldAddNamespacePrefix = new AtomicBoolean();
+  private final AtomicReference<String> namespacePrefix = new AtomicReference<>();
   private final AtomicBoolean enabled = new AtomicBoolean();
 
   BasePublicationHandler(ResourceResolverFactory resolverFactory) {
     this.resolverFactory = resolverFactory;
   }
 
-  protected void assignConfigValues(boolean enabled, String publishEventType, String unpublishEventType) {
+  protected void assignConfigValues(boolean enabled,
+      String publishEventType, String unpublishEventType,
+      boolean shouldAddNamespacePrefix, String namespacePrefix) {
     this.enabled.set(enabled);
     this.publishEventType.set(publishEventType);
     this.unpublishEventType.set(unpublishEventType);
+    this.shouldAddNamespacePrefix.set(shouldAddNamespacePrefix);
+    this.namespacePrefix.set(namespacePrefix);
   }
 
   @Override
@@ -60,7 +67,7 @@ abstract class BasePublicationHandler<T> implements PublicationHandler<T> {
       }
 
       return new PublishData<>(
-          getPublicationSubject(resourcePath),
+          getIngestionSubject(resourcePath),
           publishEventType.get(),
           payload
       );
@@ -70,10 +77,18 @@ abstract class BasePublicationHandler<T> implements PublicationHandler<T> {
   @Override
   public final UnpublishData<T> getUnpublishData(ResourceInfo resourceInfo) {
     return new UnpublishData<>(
-        getPublicationSubject(resourceInfo.getPath()),
+        getIngestionSubject(resourceInfo.getPath()),
         unpublishEventType.get(),
         getUnpublishPayload(resourceInfo)
     );
+  }
+
+  private String getIngestionSubject(String resourcePath) {
+    String subject = getPublicationSubject(resourcePath);
+    if (shouldAddNamespacePrefix.get()) {
+      return NamespacePrefixAdder.add(subject, namespacePrefix.get());
+    }
+    return subject;
   }
 
   protected String getPublicationSubject(String resourcePath) {

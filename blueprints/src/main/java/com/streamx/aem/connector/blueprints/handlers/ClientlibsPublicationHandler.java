@@ -25,9 +25,9 @@ import org.osgi.service.metatype.annotations.Designate;
     configurationPolicy = ConfigurationPolicy.REQUIRE
 )
 @Designate(ocd = ClientlibsPublicationHandlerConfig.class)
-public class ClientlibsPublicationHandler extends ResourcePathPublicationHandler<WebResource> {
+public class ClientlibsPublicationHandler extends BaseNamespaceAwareResourcePathPublicationHandler<WebResource> {
 
-  private final AtomicReference<ClientlibsPublicationHandlerConfig> config;
+  private final AtomicReference<ClientlibsPublicationHandlerConfig> config = new AtomicReference<>();
 
   @Activate
   public ClientlibsPublicationHandler(
@@ -36,7 +36,11 @@ public class ClientlibsPublicationHandler extends ResourcePathPublicationHandler
       ClientlibsPublicationHandlerConfig config
   ) {
     super(resourceResolverFactory, slingRequestProcessor);
-    this.config = new AtomicReference<>(config);
+    configure(config);
+    assignConfigValues(
+        config.should_add_namespace_prefix(),
+        config.namespace_prefix()
+    );
   }
 
   @Modified
