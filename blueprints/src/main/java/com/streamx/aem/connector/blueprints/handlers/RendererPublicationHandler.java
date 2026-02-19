@@ -4,7 +4,6 @@ import com.streamx.aem.connector.blueprints.pagedata.PageDataService;
 import com.streamx.aem.connector.blueprints.tools.ResourcePrimaryNodeTypeChecker;
 import com.streamx.blueprints.data.Renderer;
 import com.streamx.sling.connector.ResourceInfo;
-import java.util.concurrent.atomic.AtomicReference;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
@@ -21,7 +20,6 @@ import org.osgi.service.metatype.annotations.Designate;
 public class RendererPublicationHandler extends BasePublicationHandler<Renderer> {
 
   private final PageDataService pageDataService;
-  private final AtomicReference<RendererPublicationHandlerConfig> config;
 
   @Activate
   public RendererPublicationHandler(
@@ -31,20 +29,20 @@ public class RendererPublicationHandler extends BasePublicationHandler<Renderer>
   ) {
     super(resolverFactory);
     this.pageDataService = pageDataService;
-    this.config = new AtomicReference<>(config);
+    configure(config);
   }
 
   @Modified
   void configure(RendererPublicationHandlerConfig config) {
-    this.config.set(config);
+    assignConfigValues(
+        config.enabled(),
+        config.publish_event_type(),
+        config.unpublish_event_type()
+    );
   }
 
   @Override
-  public boolean canHandle(ResourceInfo resource) {
-    if (!config.get().enabled()) {
-      return false;
-    }
-
+  protected boolean canHandleResource(ResourceInfo resource) {
     if (!pageDataService.isPageTemplateByResourcePath(resource)) {
       return false;
     }
@@ -52,16 +50,6 @@ public class RendererPublicationHandler extends BasePublicationHandler<Renderer>
     try (ResourceResolver resourceResolver = createResourceResolver()) {
       return ResourcePrimaryNodeTypeChecker.isPage(resource, resourceResolver);
     }
-  }
-
-  @Override
-  protected String getPublishEventType() {
-    return config.get().publish_event_type();
-  }
-
-  @Override
-  protected String getUnpublishEventType() {
-    return config.get().unpublish_event_type();
   }
 
   @Override

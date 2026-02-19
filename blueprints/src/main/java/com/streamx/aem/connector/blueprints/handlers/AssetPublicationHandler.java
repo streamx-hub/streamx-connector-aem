@@ -33,7 +33,8 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
   private static final Logger LOG = LoggerFactory.getLogger(AssetPublicationHandler.class);
 
   private final SlingRequestProcessor slingRequestProcessor;
-  private final AtomicReference<AssetPublicationHandlerConfig> config;
+  private final AtomicReference<String> assetsPathRegexp = new AtomicReference<>();
+  private final AtomicReference<String> jcrPropNameForStreamxResourceType = new AtomicReference<>();
 
   @Activate
   public AssetPublicationHandler(
@@ -43,38 +44,30 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
   ) {
     super(resolverFactory);
     this.slingRequestProcessor = slingRequestProcessor;
-    this.config = new AtomicReference<>(config);
+    configure(config);
   }
 
   @Modified
   void configure(AssetPublicationHandlerConfig config) {
-    this.config.set(config);
+    assignConfigValues(
+        config.enabled(),
+        config.publish_event_type(),
+        config.unpublish_event_type()
+    );
+    assetsPathRegexp.set(config.assets_path_regexp());
+    jcrPropNameForStreamxResourceType.set(config.jcr_prop_name_for_streamx_resource_type());
   }
 
   @Override
-  public boolean canHandle(ResourceInfo resource) {
-    if (!config.get().enabled()) {
-      return false;
-    }
-
+  protected boolean canHandleResource(ResourceInfo resource) {
     String resourcePath = resource.getPath();
-    if (!resourcePath.matches(config.get().assets_path_regexp())) {
+    if (!resourcePath.matches(assetsPathRegexp.get())) {
       return false;
     }
 
     try (ResourceResolver resourceResolver = createResourceResolver()) {
       return ResourcePrimaryNodeTypeChecker.isAsset(resource, resourceResolver);
     }
-  }
-
-  @Override
-  protected String getPublishEventType() {
-    return config.get().publish_event_type();
-  }
-
-  @Override
-  protected String getUnpublishEventType() {
-    return config.get().unpublish_event_type();
   }
 
   @Override
@@ -114,7 +107,7 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
   }
 
   private String getStreamxResourceType(ResourceInfo resourceInfo) {
-    return readProperty(resourceInfo, config.get().jcr_prop_name_for_streamx_resource_type());
+    return readProperty(resourceInfo, jcrPropNameForStreamxResourceType.get());
   }
 
 }
