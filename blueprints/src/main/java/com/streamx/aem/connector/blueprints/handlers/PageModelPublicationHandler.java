@@ -27,9 +27,6 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
 
   private final PageDataService pageDataService;
 
-  private final AtomicReference<Boolean> enabled = new AtomicReference<>();
-  private final AtomicReference<String> publishEventType = new AtomicReference<>();
-  private final AtomicReference<String> unpublishEventType = new AtomicReference<>();
   private final AtomicReference<Pattern> pageResourcePathRegex = new AtomicReference<>();
   private final AtomicReference<String[]> selectorsToAppend = new AtomicReference<>();
   private final AtomicReference<String> extensionToAppend = new AtomicReference<>();
@@ -49,9 +46,11 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
 
   @Modified
   void configure(PageModelPublicationHandlerConfig config) {
-    enabled.set(config.enabled());
-    publishEventType.set(config.publish_event_type());
-    unpublishEventType.set(config.unpublish_event_type());
+    assignConfigValues(
+        config.enabled(),
+        config.publish_event_type(),
+        config.unpublish_event_type()
+    );
 
     String pathRegex = config.page_resource_path_regex();
     pageResourcePathRegex.set(Optional.ofNullable(pathRegex).map(Pattern::compile).orElse(null));
@@ -63,11 +62,7 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
   }
 
   @Override
-  public boolean canHandle(ResourceInfo resource) {
-    if (!enabled.get()) {
-      return false;
-    }
-
+  protected boolean canHandleResource(ResourceInfo resource) {
     if (ResourcePrimaryNodeTypeChecker.isXFPath(resource.getPath())) {
       return false;
     }
@@ -84,16 +79,6 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
     try (ResourceResolver resourceResolver = createResourceResolver()) {
       return ResourcePrimaryNodeTypeChecker.isPage(resource, resourceResolver);
     }
-  }
-
-  @Override
-  protected String getPublishEventType() {
-    return publishEventType.get();
-  }
-
-  @Override
-  protected String getUnpublishEventType() {
-    return unpublishEventType.get();
   }
 
   @Override

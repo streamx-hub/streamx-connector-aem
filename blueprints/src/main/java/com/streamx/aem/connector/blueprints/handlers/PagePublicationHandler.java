@@ -23,7 +23,8 @@ import org.osgi.service.metatype.annotations.Designate;
 public class PagePublicationHandler extends BasePublicationHandler<Page> {
 
   private final PageDataService pageDataService;
-  private final AtomicReference<PagePublicationHandlerConfig> config;
+  private final AtomicReference<String> relPathToNodeWithJcrPropForStreamxResourceType = new AtomicReference<>();
+  private final AtomicReference<String> jcrPropNameForStreamxResourceType = new AtomicReference<>();
 
   @Activate
   public PagePublicationHandler(
@@ -33,20 +34,22 @@ public class PagePublicationHandler extends BasePublicationHandler<Page> {
   ) {
     super(resolverFactory);
     this.pageDataService = pageDataService;
-    this.config = new AtomicReference<>(config);
+    configure(config);
   }
 
   @Modified
   void configure(PagePublicationHandlerConfig config) {
-    this.config.set(config);
+    assignConfigValues(
+        config.enabled(),
+        config.publish_event_type(),
+        config.unpublish_event_type()
+    );
+    relPathToNodeWithJcrPropForStreamxResourceType.set(config.rel_path_to_node_with_jcr_prop_for_streamx_resource_type());
+    jcrPropNameForStreamxResourceType.set(config.jcr_prop_name_for_streamx_resource_type());
   }
 
   @Override
-  public boolean canHandle(ResourceInfo resource) {
-    if (!config.get().enabled()) {
-      return false;
-    }
-
+  protected boolean canHandleResource(ResourceInfo resource) {
     if (ResourcePrimaryNodeTypeChecker.isXFPath(resource.getPath())) {
       return false;
     }
@@ -58,16 +61,6 @@ public class PagePublicationHandler extends BasePublicationHandler<Page> {
     try (ResourceResolver resourceResolver = createResourceResolver()) {
       return ResourcePrimaryNodeTypeChecker.isPage(resource, resourceResolver);
     }
-  }
-
-  @Override
-  protected String getPublishEventType() {
-    return config.get().publish_event_type();
-  }
-
-  @Override
-  protected String getUnpublishEventType() {
-    return config.get().unpublish_event_type();
   }
 
   @Override
@@ -83,8 +76,8 @@ public class PagePublicationHandler extends BasePublicationHandler<Page> {
 
   private String getStreamxResourceType(ResourceInfo resourceInfo) {
     return readProperty(resourceInfo,
-        config.get().rel_path_to_node_with_jcr_prop_for_streamx_resource_type(),
-        config.get().jcr_prop_name_for_streamx_resource_type()
+        relPathToNodeWithJcrPropForStreamxResourceType.get(),
+        jcrPropNameForStreamxResourceType.get()
     );
   }
 
