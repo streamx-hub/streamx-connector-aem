@@ -24,9 +24,9 @@ import org.osgi.service.metatype.annotations.Designate;
     configurationPolicy = ConfigurationPolicy.REQUIRE
 )
 @Designate(ocd = AssetResourcePathPublicationHandlerConfig.class)
-public class AssetResourcePathPublicationHandler extends ResourcePathPublicationHandler<Asset> {
+public class AssetResourcePathPublicationHandler extends BaseNamespaceAwareResourcePathPublicationHandler<Asset> {
 
-  private final AtomicReference<AssetResourcePathPublicationHandlerConfig> config;
+  private final AtomicReference<AssetResourcePathPublicationHandlerConfig> config = new AtomicReference<>();
 
   @Activate
   public AssetResourcePathPublicationHandler(
@@ -35,12 +35,16 @@ public class AssetResourcePathPublicationHandler extends ResourcePathPublication
       AssetResourcePathPublicationHandlerConfig config
   ) {
     super(resourceResolverFactory, slingRequestProcessor);
-    this.config = new AtomicReference<>(config);
+    configure(config);
   }
 
   @Modified
   void configure(AssetResourcePathPublicationHandlerConfig config) {
     this.config.set(config);
+    assignConfigValues(
+        config.should_add_namespace_prefix(),
+        config.namespace_prefix()
+    );
   }
 
   @Override

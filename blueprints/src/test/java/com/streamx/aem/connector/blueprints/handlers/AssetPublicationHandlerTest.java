@@ -60,12 +60,11 @@ class AssetPublicationHandlerTest {
     String irrelevantPath = "/conf/irrelevant-resource";
     @SuppressWarnings("resource")
     ResourceResolver resourceResolver = context.resourceResolver();
-    AssetPublicationHandler enabled = context.registerInjectActivateService(
-        AssetPublicationHandler.class, Map.of("enabled", true)
-    );
-    AssetPublicationHandler disabled = context.registerInjectActivateService(
-        AssetPublicationHandler.class, Map.of("enabled", false)
-    );
+    AssetPublicationHandler enabled = createHandler(Map.of(
+        "enabled", true,
+        "should.add.namespace.prefix", false
+    ));
+    AssetPublicationHandler disabled = createHandler(Map.of("enabled", false));
     assertThat(resourceResolver.getResource(irrelevantPath)).isNotNull();
     assertThat(resourceResolver.getResource(mountainPath)).isNotNull();
     assertThat(resourceResolver.getResource(mountainContent)).isNotNull();
@@ -78,12 +77,11 @@ class AssetPublicationHandlerTest {
   @Test
   void canGetPublishData() {
     String assetPath = "/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg";
-    AssetPublicationHandler handler = context.registerInjectActivateService(
-        AssetPublicationHandler.class, Map.of(
-            "enabled", true,
-            "jcr.prop.name.for.streamx.resource.type", "jcr:primaryType"
-        )
-    );
+    AssetPublicationHandler handler = createHandler(Map.of(
+        "enabled", true,
+        "jcr.prop.name.for.streamx.resource.type", "jcr:primaryType",
+        "should.add.namespace.prefix", false
+    ));
     ResourceInfo resourceInfo = ResourceInfoFactory.asset(assetPath);
     assertThat(handler.canHandle(resourceInfo)).isTrue();
 
@@ -102,9 +100,38 @@ class AssetPublicationHandlerTest {
   }
 
   @Test
+  void canGetPublishDataWithNamespace() {
+    String assetPath = "/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg";
+    AssetPublicationHandler handler = createHandler(Map.of(
+        "enabled", true,
+        "jcr.prop.name.for.streamx.resource.type", "jcr:primaryType",
+        "should.add.namespace.prefix", true,
+        "namespace.prefix", "test-images"
+    ));
+    ResourceInfo resourceInfo = ResourceInfoFactory.asset(assetPath);
+    assertThat(handler.canHandle(resourceInfo)).isTrue();
+
+    PublishData<Asset> publishData = handler.getPublishData(resourceInfo);
+    assertThat(publishData.getData().getContent().array()).hasSize(DATA_SIZE);
+    assertThat(publishData.getSubject()).isEqualTo("test-images:" + assetPath);
+    assertThat(publishData.getData()).isInstanceOf(Asset.class);
+    assertThat(publishData.getData().getType()).isEqualTo("dam:Asset");
+
+    UnpublishData<Asset> unpublishData = handler.getUnpublishData(resourceInfo);
+    assertThat(unpublishData.getSubject()).isEqualTo("test-images:" + assetPath);
+    assertThat(unpublishData.getData().getType()).isEqualTo("dam:Asset");
+
+    OsgiConfigUtils.disableHandler(handler, context);
+    assertThat(handler.canHandle(resourceInfo)).isFalse();
+  }
+
+  @Test
   void shouldSkipHandlingContentFragmentAsset() {
     String contentFragmentPath = "/content/dam/productssite/my-content-fragment";
-    AssetPublicationHandler handler = context.registerInjectActivateService(AssetPublicationHandler.class);
+    AssetPublicationHandler handler = createHandler(Map.of(
+        "enabled", true,
+        "should.add.namespace.prefix", false
+    ));
 
     ResourceInfo resourceInfo = ResourceInfoFactory.asset(contentFragmentPath);
     assertThat(handler.canHandle(resourceInfo)).isTrue();
@@ -115,5 +142,11 @@ class AssetPublicationHandlerTest {
     UnpublishData<Asset> unpublishData = handler.getUnpublishData(resourceInfo);
     assertThat(unpublishData.getSubject()).isEqualTo(contentFragmentPath);
     assertThat(unpublishData.getData().getType()).isNull();
+  }
+
+  private AssetPublicationHandler createHandler(Map<String, Object> properties) {
+    return context.registerInjectActivateService(
+        AssetPublicationHandler.class, properties
+    );
   }
 }

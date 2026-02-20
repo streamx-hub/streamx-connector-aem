@@ -40,4 +40,10 @@ public @interface AssetResourcePathPublicationHandlerConfig {
       defaultValue = Asset.TYPE_UNPUBLISHED
   )
   String unpublish_event_type() default Asset.TYPE_UNPUBLISHED;
+
+  @AttributeDefinition(name = "Should add namespace prefix")
+  boolean should_add_namespace_prefix() default true;
+
+  @AttributeDefinition(name = "Namespace prefix")
+  String namespace_prefix() default "";
 }

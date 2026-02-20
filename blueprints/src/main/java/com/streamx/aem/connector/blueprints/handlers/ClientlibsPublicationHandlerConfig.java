@@ -40,4 +40,10 @@ public @interface ClientlibsPublicationHandlerConfig {
       defaultValue = WebResource.TYPE_UNPUBLISHED
   )
   String unpublish_event_type() default WebResource.TYPE_UNPUBLISHED;
+
+  @AttributeDefinition(name = "Should add namespace prefix")
+  boolean should_add_namespace_prefix() default false;
+
+  @AttributeDefinition(name = "Namespace prefix")
+  String namespace_prefix() default "";
 }

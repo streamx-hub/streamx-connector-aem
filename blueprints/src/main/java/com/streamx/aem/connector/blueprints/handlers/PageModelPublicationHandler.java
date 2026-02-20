@@ -49,7 +49,9 @@ public class PageModelPublicationHandler extends BasePublicationHandler<Data> {
     assignConfigValues(
         config.enabled(),
         config.publish_event_type(),
-        config.unpublish_event_type()
+        config.unpublish_event_type(),
+        config.should_add_namespace_prefix(),
+        config.namespace_prefix()
     );
 
     String pathRegex = config.page_resource_path_regex();

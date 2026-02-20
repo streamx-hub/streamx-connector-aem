@@ -52,7 +52,9 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
     assignConfigValues(
         config.enabled(),
         config.publish_event_type(),
-        config.unpublish_event_type()
+        config.unpublish_event_type(),
+        config.should_add_namespace_prefix(),
+        config.namespace_prefix()
     );
     assetsPathRegexp.set(config.assets_path_regexp());
     jcrPropNameForStreamxResourceType.set(config.jcr_prop_name_for_streamx_resource_type());
