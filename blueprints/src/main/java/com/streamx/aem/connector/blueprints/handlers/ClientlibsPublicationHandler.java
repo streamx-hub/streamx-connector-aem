@@ -3,7 +3,6 @@ package com.streamx.aem.connector.blueprints.handlers;
 import com.streamx.aem.connector.blueprints.tools.ByteBuffers;
 import com.streamx.blueprints.data.WebResource;
 import com.streamx.sling.connector.PublicationHandler;
-import com.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandler;
 import com.streamx.sling.connector.handlers.resourcepath.ResourcePathPublicationHandlerConfig;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -18,9 +17,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
 
 @Component(
-    service = {
-        ResourcePathPublicationHandler.class, PublicationHandler.class, ClientlibsPublicationHandler.class
-    },
+    service = PublicationHandler.class,
     immediate = true,
     configurationPolicy = ConfigurationPolicy.REQUIRE
 )

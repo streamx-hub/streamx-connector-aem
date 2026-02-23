@@ -4,6 +4,7 @@ import com.streamx.aem.connector.blueprints.pagedata.PageDataService;
 import com.streamx.aem.connector.blueprints.tools.ResourcePrimaryNodeTypeChecker;
 import com.streamx.blueprints.data.RenderingContext;
 import com.streamx.blueprints.data.RenderingContext.OutputFormat;
+import com.streamx.sling.connector.PublicationHandler;
 import com.streamx.sling.connector.ResourceInfo;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component
+@Component(service = PublicationHandler.class)
 @Designate(ocd = RenderingContextPublicationHandlerConfig.class)
 @ServiceDescription("Publication handler for rendering contexts")
 public class RenderingContextPublicationHandler extends BasePublicationHandler<RenderingContext> {
