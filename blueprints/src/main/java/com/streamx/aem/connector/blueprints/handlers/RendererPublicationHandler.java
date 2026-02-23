@@ -3,6 +3,7 @@ package com.streamx.aem.connector.blueprints.handlers;
 import com.streamx.aem.connector.blueprints.pagedata.PageDataService;
 import com.streamx.aem.connector.blueprints.tools.ResourcePrimaryNodeTypeChecker;
 import com.streamx.blueprints.data.Renderer;
+import com.streamx.sling.connector.PublicationHandler;
 import com.streamx.sling.connector.ResourceInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -14,7 +15,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.propertytypes.ServiceDescription;
 import org.osgi.service.metatype.annotations.Designate;
 
-@Component
+@Component(service = PublicationHandler.class)
 @Designate(ocd = RendererPublicationHandlerConfig.class)
 @ServiceDescription("Publication handler for renderers")
 public class RendererPublicationHandler extends BasePublicationHandler<Renderer> {
