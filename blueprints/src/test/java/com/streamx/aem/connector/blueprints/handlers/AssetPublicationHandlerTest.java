@@ -75,6 +75,30 @@ class AssetPublicationHandlerTest {
   }
 
   @Test
+  void publishesDamAssetDiscoveredByPathOnly() {
+    String folder = "/content/dam/core-components-examples/library/sample-assets";
+    String assetPath = folder + "/lava-rock-formation.jpg";
+    ResourceInfo relatedAsset = new ResourceInfo(assetPath);
+    AssetPublicationHandler handler = createHandler(Map.of(
+        "enabled", true,
+        "should.add.namespace.prefix", false
+    ));
+
+    assertThat(handler.canHandle(relatedAsset)).isTrue();
+    PublishData<Asset> publishData = handler.getPublishData(relatedAsset);
+    assertThat(publishData.getSubject()).isEqualTo(assetPath);
+    assertThat(publishData.getData().getContent().array()).hasSize(DATA_SIZE);
+
+    assertThat(handler.canHandle(new ResourceInfo(folder))).isFalse();
+    assertThat(handler.canHandle(new ResourceInfo(folder + "/missing.jpg"))).isFalse();
+    assertThat(handler.canHandle(new ResourceInfo(assetPath + "/jcr:content"))).isFalse();
+    assertThat(handler.canHandle(new ResourceInfo("/conf/irrelevant-resource"))).isFalse();
+
+    ResourceInfo fragment = new ResourceInfo("/content/dam/productssite/my-content-fragment");
+    assertThat(handler.getPublishData(fragment)).isNull();
+  }
+
+  @Test
   void canGetPublishData() {
     String assetPath = "/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg";
     AssetPublicationHandler handler = createHandler(Map.of(
