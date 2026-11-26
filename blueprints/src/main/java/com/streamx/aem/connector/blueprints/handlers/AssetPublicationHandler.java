@@ -8,8 +8,10 @@ import com.streamx.sling.connector.PublicationHandler;
 import com.streamx.sling.connector.ResourceInfo;
 import com.streamx.sling.connector.util.SimpleInternalRequest;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
@@ -68,7 +70,20 @@ public class AssetPublicationHandler extends BasePublicationHandler<Asset> {
     }
 
     try (ResourceResolver resourceResolver = createResourceResolver()) {
-      return ResourcePrimaryNodeTypeChecker.isAsset(resource, resourceResolver);
+      if (resource.getProperty(JcrConstants.JCR_PRIMARYTYPE) != null) {
+        return ResourcePrimaryNodeTypeChecker.isAsset(resource, resourceResolver);
+      }
+
+      Resource candidate = resourceResolver.getResource(resourcePath);
+      if (candidate == null) {
+        return false;
+      }
+
+      String primaryType = candidate.getValueMap().get(JcrConstants.JCR_PRIMARYTYPE, String.class);
+      return primaryType != null && ResourcePrimaryNodeTypeChecker.isAsset(
+          new ResourceInfo(resourcePath, Map.of(JcrConstants.JCR_PRIMARYTYPE, primaryType)),
+          resourceResolver
+      );
     }
   }
 
